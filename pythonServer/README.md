@@ -59,6 +59,8 @@ http://localhost:5000/api/v1/
 ## Deploying to Heroku (run from the root folder)
 ```
 heroku login
+heroku config:set FLASK_APP=autoapp.py --app pennappsxx-server
+heroku config:set FLASK_DEBUG=1 --app pennappsxx-server
 git subtree push --prefix pythonServer heroku master
 ```
 
