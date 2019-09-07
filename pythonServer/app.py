@@ -1,8 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_restplus import Api, Resource
 
-from . import api
-
 app = Flask(__name__)
 api = Api(app)
 
