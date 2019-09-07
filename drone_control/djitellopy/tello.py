@@ -26,10 +26,10 @@ class Tello:
     """
     # Send and receive commands, client socket
     UDP_PORT = 8889
-    RESPONSE_TIMEOUT = 3  # in seconds
+    RESPONSE_TIMEOUT = 5  # in seconds
     TIME_BTW_COMMANDS = 1  # in seconds
     TIME_BTW_RC_CONTROL_COMMANDS = 0.5  # in seconds
-    RETRY_COUNT = 0
+    RETRY_COUNT = 3
     last_received_command = time.time()
 
     HANDLER = logging.StreamHandler()
@@ -55,7 +55,7 @@ class Tello:
     cap = None
     background_frame_read = None
 
-    stream_on = False
+    stream_on = True
     clientSocket = socket.socket(socket.AF_INET,  # Internet
                                     socket.SOCK_DGRAM)  # UDP
     clientSocket = setsockbufsize(clientSocket, SEND_BUF_SIZE, RECV_BUF_SIZE)
@@ -77,7 +77,7 @@ class Tello:
         self.address = (host, port)
         self.response = None
         self.response_state = None  #to attain the response of the states
-        self.stream_on = False
+        self.stream_on = True
         self.enable_exceptions = enable_exceptions
         self.retry_count = retry_count
 

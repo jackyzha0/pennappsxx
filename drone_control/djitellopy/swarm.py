@@ -18,16 +18,6 @@ class TelloSwarm:
 		for ip in ips:
 			tellos.append(Tello(ip))
 
-		# firstTello = Tello(ips[0])
-		# tellos = [firstTello]
-
-		# for ip in ips[1:]:
-		# 	tellos.append(Tello(
-		# 		ip,
-		# 		client_socket=firstTello.clientSocket,
-		# 		enable_exceptions=enable_exceptions
-		# 	))
-
 		return TelloSwarm(tellos)
 
 	def __init__(self, tellos):
