@@ -1,21 +1,22 @@
-import './App.css';
 import 'typeface-roboto';
 import React from 'react';
 import history from './history';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
-import NavBar from './NavBar/NavBar';
-import PlanScreen from './PlanScreen/PlanScreen';
-import ImageScreen from './ImageScreen/ImageScreen';
-import DataScreen from './DataScreen/DataScreen';
+import NavBar from './components/navbar/NavBar';
+import PlanScreen from './planscreen/PlanScreen';
+import ImageScreen from './imagescreen/ImageScreen';
+import DataScreen from './datascreen/DataScreen';
 
 const styles = {
   container: {
     display: 'flex',
-    width: '100%',
-    height: '100%'
+    height: '100%',
+    marginRight: '4rem',
+    borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+    overflowY: 'scroll'
   }
-}
+};
 
 const WebApp = ({}) => {
   return (

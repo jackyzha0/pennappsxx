@@ -43,7 +43,7 @@ class Command(Resource):
         # TODO: generate job_id
         # TODO: forward this command to the drone proxy
         return {
-            "result": "OK"
+            "result": "OK",
             "job_id": job_id
         }, 200
 
@@ -58,7 +58,7 @@ class Fetch(Resource):
     def get(self):
         status = True
         job_id = 1
-        flight_plan = "CONE"
+        flight_plan = "LINE"
 
         return {
             "result": "OK",
