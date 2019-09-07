@@ -4,22 +4,44 @@ from flask_restplus import Api, Resource
 app = Flask(__name__)
 api = Api(app)
 
+VALID_FLIGHT_PLANS = ['CONE', 'LINE']
+
 # Dashboard Endpoints ---------------------------
 class Status(Resource):
     def get(self):
         return {
-            "status": "Up and running"
+            "result": "OK",
+            "status": [
+                { drone_id: 1, model: 'TELLO EDU 1', active: False, battery: 0.5,
+                 flight_time: 0, speed: 0},
+                { drone_id: 2, model: 'TELLO EDU 2', active: False, battery: 0.5,
+                 flight_time: 0, speed: 0},
+                { drone_id: 3, model: 'TELLO EDU 3', active: False, battery: 0.5,
+                 flight_time: 0, speed: 0}
+            ]
         }, 200
 
 class Command(Resource):
+    '''
+        Dashboard submits a flight plan to initiate drone mission.
+        - returns the job_id
+    '''
+
     def post(self):
         json_data = request.get_json(force=True)
-        cmd = json_data['command']
-        print("commando is: ", cmd)
+        flight_plan = json_data['flight_plan']
+
+        if flight_plan not in VALID_FLIGHT_PLANS:
+            return {
+                "result": "error"
+            }, 400
+
+        job_id = 1
         # TODO: generate job_id
         # TODO: forward this command to the drone proxy
         return {
             "result": "OK"
+            "job_id": job_id
         }, 200
 
 
@@ -31,11 +53,15 @@ class Fetch(Resource):
         - False otherwise
     '''
     status = True
+    job_id = 1
+    flight_plan = "CONE"
+
     def get(self):
         return {
             "result": "OK",
-            "status": True,
-            "job_id": 1
+            "status": status,
+            "job_id": job_id,
+            "flight_plan": flight_plan
         }, 200
 
 class Info(Resource):
