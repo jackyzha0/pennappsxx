@@ -12,10 +12,12 @@ def run():
     swarm = TelloSwarm.fromIps(ips)
     swarm.connect()
 
+    while not os.path.isfile('flightpath.txt'):
+        time.sleep(0.1)
+
     with open('flightpath.txt') as fp:
        line = fp.readline()
        while line:
-           print(line.replace('\n',''))
            swarm.send_command_with_return(line.replace('\n',''))
            line = fp.readline()
            time.sleep(5)
@@ -40,8 +42,6 @@ def run():
 
     swarm.land()
     swarm.end()
-
-    os.remove('flightpath.txt')
 
 def exit_gracefully(signum, frame):
     # restore the original signal handler as otherwise evil things will happen
