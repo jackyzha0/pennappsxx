@@ -23,4 +23,3 @@ class Command(Resource):
 
 api.add_resource(Status, '/status')
 api.add_resource(Command, '/command')
-
