@@ -10,7 +10,7 @@ def messageReceived(methods=['GET', 'POST']):
 
 # @app.route('/command')
 
-@socketio.on('my event')
+@socketio.on('command')
 def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: ' + str(json))
     socketio.emit('my response', json, callback=messageReceived)

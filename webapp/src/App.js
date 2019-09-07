@@ -1,8 +1,9 @@
 import React from 'react';
-const io = require('socket.io-client');
 import pic from './debris.jpg';
 import './App.css';
 import SideBar from './sidebar';
+import io from 'socket.io-client';
+// const io = require('socket.io-client');
 
 const PYTHON_SERVER_URL = 'https://pennappsxx-server.herokuapp.com:8000';
 let socket;
@@ -23,16 +24,19 @@ export default class MarineDebris extends React.Component {
 
   componentWillMount() {
     socket = io(PYTHON_SERVER_URL);
-
+    console.log('here')
     socket.on('update', (data) => {
+      console.log('update')
       this.setState({ data, connected: true })
     });
 
     socket.on('disconnect', () => {
+      console.log('disconnect')
       this.setState({ connected: false })
     });
 
     socket.on('reconnect', () => {
+      console.log('reconnect')
       this.setState({ connected: true })
     });
   }
@@ -42,7 +46,9 @@ export default class MarineDebris extends React.Component {
   }
 
   handleSubmit(event) {
-    socket.emit('my event', {
+    console.log('submit')
+
+    socket.emit('update', {
       data: 'User Connected'
     } )
 
