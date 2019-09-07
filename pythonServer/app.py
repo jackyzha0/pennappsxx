@@ -43,7 +43,7 @@ class Command(Resource):
         # TODO: generate job_id
         # TODO: forward this command to the drone proxy
         return {
-            "result": "OK"
+            "result": "OK",
             "job_id": job_id
         }, 200
 
