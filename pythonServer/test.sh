@@ -1,3 +1,8 @@
+# curl -X POST -H "Content-Type: application/json" \
+#  -d '{"command":"commando"}' \
+#  http://localhost:5000/api/v1/command
+
 curl -X POST -H "Content-Type: application/json" \
  -d '{"command":"commando"}' \
- http://localhost:5000/api/v1/command
+ https://pennappsxx-server.herokuapp.com/api/v1/command
+
