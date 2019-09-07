@@ -4,5 +4,5 @@
 
 curl -X POST -H "Content-Type: application/json" \
  -d '{"command":"commando"}' \
- https://pennappsxx-server.herokuapp.com/api/v1/command
+ https://pennappsxx-server.herokuapp.com/command
 

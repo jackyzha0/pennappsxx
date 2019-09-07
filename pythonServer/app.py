@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request
-from flask_restplus import Resource
+from flask_restplus import Api, Resource
 
-from . import api
-
+app = Flask(__name__)
+api = Api(app)
 
 class Status(Resource):
     def get(self):
@@ -24,3 +24,5 @@ class Command(Resource):
 api.add_resource(Status, '/status')
 api.add_resource(Command, '/command')
 
+if __name__ == "__main__":
+  app.run()
