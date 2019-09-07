@@ -140,19 +140,22 @@ class TelloUI:
             #get the job_id
             URL = "https://pennappsxx.herokuapp.com/fetch"
             r = requests.get(url = URL, params = {})
-            id = r.json().job_id
+            data = r.json()
+            id = str(data['job_id'])
 
             #send tello status to server
             t = self.tello
-            URL = "https://penappsxx.herokuapp.com/info/" + str(id)
+            URL = "https://penappsxx.herokuapp.com/info/" + id
             data = {
+                'drone_id': t.address[0],
                 'active': True,
                 'battery': t.get_battery(),
                 'flight_time': t.get_flight_time(),
                 'speed': t.get_speed(),
-                'job_id': id
+                'job_id': id,
+                'model': 'tello'
             }
-            r = request.post(url = URL, data = data)
+            r = requests.post(url = URL, data = data)
 
     def _setQuitWaitingFlag(self):
         """
