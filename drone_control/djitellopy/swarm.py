@@ -13,15 +13,20 @@ class TelloSwarm:
 		if len(ips) == 0:
 			raise Exception("No ips provided")
 
-		firstTello = Tello(ips[0])
-		tellos = [firstTello]
+		tellos = []
 
-		for ip in ips[1:]:
-			tellos.append(Tello(
-				ip,
-				client_socket=firstTello.clientSocket,
-				enable_exceptions=enable_exceptions
-			))
+		for ip in ips:
+			tellos.append(Tello(ip))
+
+		# firstTello = Tello(ips[0])
+		# tellos = [firstTello]
+
+		# for ip in ips[1:]:
+		# 	tellos.append(Tello(
+		# 		ip,
+		# 		client_socket=firstTello.clientSocket,
+		# 		enable_exceptions=enable_exceptions
+		# 	))
 
 		return TelloSwarm(tellos)
 
@@ -54,7 +59,7 @@ class TelloSwarm:
 	def parallel(self, func):
 		for queue in self.funcQueues:
 			queue.put(func)
-		
+
 		self.funcBarrier.wait()
 		self.funcBarrier.wait()
 

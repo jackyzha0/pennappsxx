@@ -20,5 +20,6 @@ Create Access Point from Laptop using External WiFi adapter by going to `Setting
 * Change network type to station mode
   * `python cmd.py ap network netpass123`
 
-##### Find addresses
-* Settings > Mobile Hotspot > Connected Devices
+
+1. `get_ips.bat`
+2.

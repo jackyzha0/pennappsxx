@@ -7,6 +7,17 @@ import cv2
 from threading import Thread
 from djitellopy.decorators import accepts
 
+def setsockbufsize(sock, SEND_BUF_SIZE, RECV_BUF_SIZE):
+    sock.setsockopt(
+            socket.SOL_SOCKET,
+            socket.SO_SNDBUF,
+            SEND_BUF_SIZE)
+    sock.setsockopt(
+            socket.SOL_SOCKET,
+            socket.SO_RCVBUF,
+            RECV_BUF_SIZE)
+    return sock
+
 
 class Tello:
     """Python wrapper to interact with the Ryze Tello drone using the official Tello api.
@@ -14,12 +25,11 @@ class Tello:
     https://dl-cdn.ryzerobotics.com/downloads/tello/20180910/Tello%20SDK%20Documentation%20EN_1.3.pdf
     """
     # Send and receive commands, client socket
-    UDP_IP = '192.168.10.1'
     UDP_PORT = 8889
-    RESPONSE_TIMEOUT = 7  # in seconds
+    RESPONSE_TIMEOUT = 3  # in seconds
     TIME_BTW_COMMANDS = 1  # in seconds
     TIME_BTW_RC_CONTROL_COMMANDS = 0.5  # in seconds
-    RETRY_COUNT = 3
+    RETRY_COUNT = 0
     last_received_command = time.time()
 
     HANDLER = logging.StreamHandler()
@@ -32,6 +42,9 @@ class Tello:
     # use logging.getLogger('djitellopy').setLevel(logging.<LEVEL>) in YOUR CODE
     # to only receive logs of the desired level and higher
 
+    SEND_BUF_SIZE = 4096
+    RECV_BUF_SIZE = 4096
+
     # Video stream, server socket
     VS_UDP_IP = '0.0.0.0'
     VS_UDP_PORT = 11111
@@ -43,6 +56,16 @@ class Tello:
     background_frame_read = None
 
     stream_on = False
+    clientSocket = socket.socket(socket.AF_INET,  # Internet
+                                    socket.SOCK_DGRAM)  # UDP
+    clientSocket = setsockbufsize(clientSocket, SEND_BUF_SIZE, RECV_BUF_SIZE)
+    clientSocket.bind(('', UDP_PORT))  # For UDP response (receiving data)
+
+    stateSocket = socket.socket(socket.AF_INET,
+                                      socket.SOCK_DGRAM)
+    stateSocket = setsockbufsize(stateSocket, SEND_BUF_SIZE, RECV_BUF_SIZE)
+    stateSocket.bind(('', STATE_UDP_PORT)) # for accessing the states of Tello
+
 
     def __init__(self,
         host='192.168.10.1',
@@ -60,14 +83,6 @@ class Tello:
 
         if client_socket:
             self.clientSocket = client_socket
-        else:
-            self.clientSocket = socket.socket(socket.AF_INET,  # Internet
-                                            socket.SOCK_DGRAM)  # UDP
-            self.clientSocket.bind(('', self.UDP_PORT))  # For UDP response (receiving data)
-
-        self.stateSocket = socket.socket(socket.AF_INET,
-                                          socket.SOCK_DGRAM)
-        self.stateSocket.bind(('', self.STATE_UDP_PORT))# for accessing the states of Tello
 
         # Run tello udp receiver on background
         thread1 = threading.Thread(target=self.run_udp_receiver, args=())
