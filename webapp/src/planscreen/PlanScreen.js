@@ -7,7 +7,7 @@ export default class PlanScreen extends Component {
 
   render() {
     return (
-      <div>
+      <div className="page-container">
         page screen
       </div>
     )

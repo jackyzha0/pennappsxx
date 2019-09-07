@@ -7,7 +7,7 @@ export default class DataScreen extends Component {
 
   render() {
     return (
-      <div>
+      <div className="page-container">
         data screen
       </div>
     )

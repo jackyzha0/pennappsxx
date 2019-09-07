@@ -1,13 +1,12 @@
-import './App.css';
 import 'typeface-roboto';
 import React from 'react';
 import history from './history';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
-import NavBar from './NavBar/NavBar';
-import PlanScreen from './PlanScreen/PlanScreen';
-import ImageScreen from './ImageScreen/ImageScreen';
-import DataScreen from './DataScreen/DataScreen';
+import NavBar from './components/navbar/NavBar';
+import PlanScreen from './planscreen/PlanScreen';
+import ImageScreen from './imagescreen/ImageScreen';
+import DataScreen from './datascreen/DataScreen';
 
 const styles = {
   container: {

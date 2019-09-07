@@ -7,7 +7,7 @@ export default class ImageScreen extends Component {
 
   render() {
     return (
-      <div>
+      <div className="page-container">
         image screen
       </div>
       )
