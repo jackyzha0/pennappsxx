@@ -3,6 +3,7 @@ from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
+app.config['CORS_AUTOMATIC_OPTIONS'] = True
 socketio = SocketIO(app)
 
 def messageReceived(methods=['GET', 'POST']):
