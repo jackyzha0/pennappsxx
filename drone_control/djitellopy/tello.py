@@ -29,7 +29,7 @@ class Tello:
     RESPONSE_TIMEOUT = 5  # in seconds
     TIME_BTW_COMMANDS = 1  # in seconds
     TIME_BTW_RC_CONTROL_COMMANDS = 0.5  # in seconds
-    RETRY_COUNT = 3
+    RETRY_COUNT = 10
     last_received_command = time.time()
 
     HANDLER = logging.StreamHandler()

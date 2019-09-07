@@ -1,19 +1,20 @@
 # DroneProject
 
-| nth-drone | Name   | Password     | Owner | IP |
-|-----------|--------|--------------|-------|----|
-| 0         | drone0 | dronepass123 | Jacky | 192.168.137.111 |
-| 1         | drone1 | dronepass123 | Hayden| 192.168.137.148 |
-|           |        |              |       |
-
 ### Setup instructions
 Create Access Point from Laptop using External WiFi adapter by going to `Settings > Mobile Hotspot > On`
 * SSID: network
 * Pass: netpass
 
-##### First Time Setup
+##### First Time Setup for leader drones
 * Verify serial number with mobile Tello app (important, or else commands don't work)
 * Connect to Tello broadcasted network
+* Update Firmware
+Info and source code is under the `restful` folder.
+
+##### First Time Setup for follower drones
+* Verify serial number with mobile Tello app (important, or else commands don't work)
+* Connect to Tello broadcasted network
+* Update Firmware
 * Change network name and password
   * `python cmd.py wifi dronen dronepass123`
   * where `n` is the nth drone
