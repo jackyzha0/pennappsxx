@@ -40,3 +40,48 @@ body {
   height: min-content;
   width: 100%;
 }
+
+.Arrow {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  animation-name: arrow-up;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes arrow-up {
+  0%   {top:200px;}
+  50% {top:0px;}
+  100% {top:200px;}
+}
+
+.Arrow-sideleft {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  animation-name: arrow-sideleft;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes arrow-sideleft {
+  0%   {right:0px; top:200px;}
+  50% {right:200px; top:0px;}
+  100% {right:0px; top:200px;}
+}
+
+.Arrow-sideright {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  animation-name: arrow-sideright;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes arrow-sideright {
+  0%   {left:0px; top:200px;}
+  50% {left:200px; top:0px;}
+  100% {left:0px; top:200px;}
+}
