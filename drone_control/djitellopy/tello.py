@@ -3,21 +3,8 @@ import logging
 import socket
 import time
 import threading
-import cv2
 from threading import Thread
 from djitellopy.decorators import accepts
-
-def setsockbufsize(sock, SEND_BUF_SIZE, RECV_BUF_SIZE):
-    sock.setsockopt(
-            socket.SOL_SOCKET,
-            socket.SO_SNDBUF,
-            SEND_BUF_SIZE)
-    sock.setsockopt(
-            socket.SOL_SOCKET,
-            socket.SO_RCVBUF,
-            RECV_BUF_SIZE)
-    return sock
-
 
 class Tello:
     """Python wrapper to interact with the Ryze Tello drone using the official Tello api.
@@ -58,12 +45,10 @@ class Tello:
     stream_on = True
     clientSocket = socket.socket(socket.AF_INET,  # Internet
                                     socket.SOCK_DGRAM)  # UDP
-    clientSocket = setsockbufsize(clientSocket, SEND_BUF_SIZE, RECV_BUF_SIZE)
     clientSocket.bind(('', UDP_PORT))  # For UDP response (receiving data)
 
     stateSocket = socket.socket(socket.AF_INET,
                                       socket.SOCK_DGRAM)
-    stateSocket = setsockbufsize(stateSocket, SEND_BUF_SIZE, RECV_BUF_SIZE)
     stateSocket.bind(('', STATE_UDP_PORT)) # for accessing the states of Tello
 
 
@@ -265,20 +250,6 @@ class Tello:
 
     def get_udp_video_address(self):
         return 'udp://@' + self.VS_UDP_IP + ':' + str(self.VS_UDP_PORT)  # + '?overrun_nonfatal=1&fifo_size=5000'
-
-    def get_video_capture(self):
-        """Get the VideoCapture object from the camera drone
-        Returns:
-            VideoCapture
-        """
-
-        if self.cap is None:
-            self.cap = cv2.VideoCapture(self.get_udp_video_address())
-
-        if not self.cap.isOpened():
-            self.cap.open(self.get_udp_video_address())
-
-        return self.cap
 
     def get_frame_read(self):
         """Get the BackgroundFrameRead object from the camera drone. Then, you just need to call

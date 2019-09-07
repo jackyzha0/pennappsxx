@@ -1,20 +1,22 @@
-from djitellopy import TelloSwarm
 import signal
+import os
+import time
+from djitellopy import TelloSwarm
 
 def run():
     ips = [x.rstrip() for x in open('ips.txt', 'r').readlines()][1:-1]
     ips = [x[0:20].replace(" ","") for x in ips]
     # ips = ["192.168.137.156"]
+    print(ips)
+
     swarm = TelloSwarm.fromIps(ips)
     swarm.connect()
-    swarm.send_read_command("battery?")
     swarm.send_command_with_return("takeoff")
-    swarm.sync(3)
-
+    time.sleep(5)
     swarm.send_command_with_return("up 50")
-    swarm.sync(3)
-    swarm.send_command_with_return("forward 50")
-    swarm.sync(3)
+    time.sleep(5)
+    swarm.send_command_with_return("forward 10")
+    time.sleep(5)
     # # run by one tello after the other
     # swarm.sequential(lambda i, tello: tello.move_forward(i * 20))
     #
@@ -24,7 +26,6 @@ def run():
 
     swarm.land()
     swarm.end()
-
 
 def exit_gracefully(signum, frame):
     # restore the original signal handler as otherwise evil things will happen

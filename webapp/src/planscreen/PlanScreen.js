@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import wtello from './tello.png';
+import btello from './blacktello.png';
 
 const styles = {
   topPanel: {
@@ -22,8 +24,9 @@ export default class PlanScreen extends Component {
     return (
       <div className="page-container">
         <div style={styles.topPanel}>
-          <h1>carousel goes here</h1>
-          <h1>use this: https://react-bootstrap.github.io/components/carousel/</h1>
+          <img src={btello} className="Arrow-sideleft" alt="arrow" />
+          <img src={wtello} className="Arrow" alt="arrow" />
+          <img src={btello} className="Arrow-sideright" alt="arrow" />
         </div>
 
         <div style={styles.botPanel}>
