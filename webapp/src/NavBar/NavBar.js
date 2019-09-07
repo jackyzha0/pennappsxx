@@ -5,7 +5,7 @@ import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import HomeIcon from '@material-ui/core/SvgIcon/SvgIcon';
+import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import MapIcon from '@material-ui/icons/Map';
 import ListItemText from '@material-ui/core/ListItemText';
