@@ -58,7 +58,7 @@ class Fetch(Resource):
     def get(self):
         status = True
         job_id = 1
-        flight_plan = "CONE"
+        flight_plan = "LINE"
 
         return {
             "result": "OK",
