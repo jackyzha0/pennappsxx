@@ -23,4 +23,3 @@ Info and source code is under the `restful` folder.
 
 
 1. `get_ips.bat`
-2.

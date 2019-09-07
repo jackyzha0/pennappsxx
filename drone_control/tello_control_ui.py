@@ -8,6 +8,7 @@ import cv2
 import os
 import time
 import platform
+import requests
 
 class TelloUI:
     """Wrapper class to enable the GUI."""
@@ -89,22 +90,12 @@ class TelloUI:
         except RuntimeError, e:
             print("[INFO] caught a RuntimeError")
 
-    def crop(img):
-        w, h = img.size
-
-        left = w/4
-        right = 3*w/4
-        upper = h/4
-        lower = 3*h/4
-
-        return img.crop([ left, upper, right, lower])
-
     def _updateGUIImage(self,image):
         """
         Main operation to initial the object of image,and update the GUI panel
         """
         # image = TelloUI.crop(ImageTk.PhotoImage(image))
-        image = ImageTk.PhotoImage(image)
+        image = ImageTk.PhotoImage(image.crop((0,0,960,500)))
         # if the panel none ,we need to initial it
         if self.panel is None:
             self.panel = tki.Label(image=image)
@@ -115,11 +106,30 @@ class TelloUI:
             self.panel.configure(image=image)
             self.panel.image = image
 
+    def _enqueue(self, arr):
+        os.remove("drone0.lock")
+        os.remove("drone1.lock")
+        f = open("drone0.lock","w+")
+        f.close()
+        f = open("drone1.lock","w+")
+        f.close()
+
+        while arr:
+            self.tello.send_command(arr.pop(0))
+            time.sleep(3)
+        # if both locks have been consumed, delete flightpath
 
     def _sendingCommand(self):
 
         while True:
             time.sleep(1)
+            URL = "https://pennappsxx.herokuapp.com/fetch"
+            r = requests.get(url = URL, params = {})
+            data = r.json()
+
+            if data.status == "true":
+                if data.flight_path == "LINE":
+                    self._enqueue(['takeoff','up 50','forward 100'])
 
     def _setQuitWaitingFlag(self):
         """
