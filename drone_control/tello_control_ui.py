@@ -109,7 +109,7 @@ class TelloUI:
     def enqueue(self, arr):
         f = open('flightpath.txt', 'w+')
         for cmd in arr:
-            f.write(cmd)
+            f.write(cmd + '\n')
         f.close()
 
         while arr:
@@ -117,16 +117,16 @@ class TelloUI:
             time.sleep(5)
 
     def _sendingCommand(self):
-        # while True:
-        time.sleep(1)
-        URL = "https://pennappsxx.herokuapp.com/fetch"
-        r = requests.get(url = URL, params = {})
-        data = r.json()
-        print(data)
+        while not os.path.isfile('flightpath.txt'):
+            time.sleep(5)
+            URL = "https://pennappsxx.herokuapp.com/fetch"
+            r = requests.get(url = URL, params = {})
+            data = r.json()
+            print(data)
 
-        if data['status'] == True:
-            if data['flight_plan'] == "LINE":
-                self.enqueue(['takeoff','up 50','forward 100','land'])
+            if data['status'] == True:
+                if data['flight_plan'] == "LINE":
+                    self.enqueue(['takeoff','up 50','forward 100','land'])
 
     def _setQuitWaitingFlag(self):
         """

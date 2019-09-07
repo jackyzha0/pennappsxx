@@ -1,1 +1,0 @@
-takeoffup 50forward 100land

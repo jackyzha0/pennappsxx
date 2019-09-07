@@ -7,16 +7,30 @@ def run():
     ips = [x.rstrip() for x in open('ips.txt', 'r').readlines()][1:-1]
     ips = [x[0:20].replace(" ","") for x in ips]
     # ips = ["192.168.137.156"]
-    print(ips)
+
 
     swarm = TelloSwarm.fromIps(ips)
     swarm.connect()
-    swarm.send_command_with_return("takeoff")
-    time.sleep(5)
-    swarm.send_command_with_return("up 50")
-    time.sleep(5)
-    swarm.send_command_with_return("forward 10")
-    time.sleep(5)
+
+    with open('flightpath.txt') as fp:
+       line = fp.readline()
+       while line:
+           print(line.replace('\n',''))
+           swarm.send_command_with_return(line.replace('\n',''))
+           line = fp.readline()
+           time.sleep(5)
+
+    # for cmd in commands:
+    #     print(cmd)
+    #     swarm.send_command_with_return(cmd)
+    #     time.sleep(5)
+
+    # swarm.send_command_with_return("takeoff")
+    # time.sleep(5)
+    # swarm.send_command_with_return("up 50")
+    # time.sleep(5)
+    # swarm.send_command_with_return("forward 10")
+    # time.sleep(5)
     # # run by one tello after the other
     # swarm.sequential(lambda i, tello: tello.move_forward(i * 20))
     #
@@ -26,6 +40,8 @@ def run():
 
     swarm.land()
     swarm.end()
+
+    os.remove('flightpath.txt')
 
 def exit_gracefully(signum, frame):
     # restore the original signal handler as otherwise evil things will happen
