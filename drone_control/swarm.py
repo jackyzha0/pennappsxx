@@ -11,14 +11,12 @@ def run():
 
     swarm = TelloSwarm.fromIps(ips)
     swarm.connect()
-    swarm.send_read_command("battery?")
     swarm.send_command_with_return("takeoff")
-    time.sleep(3)
-
+    time.sleep(5)
     swarm.send_command_with_return("up 50")
-    time.sleep(3)
-    swarm.send_command_with_return("forward 50")
-    time.sleep(3)
+    time.sleep(5)
+    swarm.send_command_with_return("forward 10")
+    time.sleep(5)
     # # run by one tello after the other
     # swarm.sequential(lambda i, tello: tello.move_forward(i * 20))
     #

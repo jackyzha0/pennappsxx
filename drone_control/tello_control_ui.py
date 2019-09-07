@@ -106,28 +106,27 @@ class TelloUI:
             self.panel.configure(image=image)
             self.panel.image = image
 
-    def _enqueue(self, arr):
-
-        f = open("flightpath","a")
+    def enqueue(self, arr):
+        f = open('flightpath.txt', 'w+')
         for cmd in arr:
             f.write(cmd)
         f.close()
 
         while arr:
             self.tello.send_command(arr.pop(0))
-            time.sleep(3)
+            time.sleep(5)
 
     def _sendingCommand(self):
-        while True:
-            print('haha john sucks')
-            time.sleep(1)
-            URL = "https://pennappsxx.herokuapp.com/fetch"
-            r = requests.get(url = URL, params = {})
-            data = r.json()
+        # while True:
+        time.sleep(1)
+        URL = "https://pennappsxx.herokuapp.com/fetch"
+        r = requests.get(url = URL, params = {})
+        data = r.json()
+        print(data)
 
-            if data.status == "true":
-                if data.flight_path == "LINE":
-                    self._enqueue(['takeoff','up 50','forward 100'])
+        if data['status'] == True:
+            if data['flight_plan'] == "LINE":
+                self.enqueue(['takeoff','up 50','forward 100','land'])
 
     def _setQuitWaitingFlag(self):
         """
