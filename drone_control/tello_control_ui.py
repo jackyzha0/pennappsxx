@@ -62,6 +62,11 @@ class TelloUI:
 
         # the sending_command will send command to tello every 5 seconds
         self.sending_command_thread = threading.Thread(target = self._sendingCommand)
+
+        # sends status of tello to server every 5 seconds
+        self.sending_status = threading.Thread(target = self.sendTelloStatus)
+        self.sending_status.start()
+
     def videoLoop(self):
         """
         The mainloop thread of Tkinter
@@ -127,6 +132,27 @@ class TelloUI:
             if data['status'] == True:
                 if data['flight_plan'] == "LINE":
                     self.enqueue(['takeoff','up 50','forward 100','land'])
+
+    def sendTelloStatus(self):
+        while os.path.isfile('flightpath.txt'):
+            time.sleep(5)
+
+            #get the job_id
+            URL = "https://pennappsxx.herokuapp.com/fetch"
+            r = requests.get(url = URL, params = {})
+            id = r.json().job_id
+
+            #send tello status to server
+            t = self.tello
+            URL = "https://penappsxx.herokuapp.com/info/" + str(id)
+            data = {
+                'active': True,
+                'battery': t.get_battery(),
+                'flight_time': t.get_flight_time(),
+                'speed': t.get_speed(),
+                'job_id': id
+            }
+            r = request.post(url = URL, data = data)
 
     def _setQuitWaitingFlag(self):
         """
