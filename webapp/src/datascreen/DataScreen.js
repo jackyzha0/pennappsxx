@@ -8,7 +8,9 @@ export default class DataScreen extends Component {
   render() {
     return (
       <div className="page-container">
-        data screen
+        <h1>TODO: make this look nice with animated graphs and stuff</h1>
+        <p>maybe use D3.js</p>
+        <p>incorporate pdf forms</p>
       </div>
     )
   }

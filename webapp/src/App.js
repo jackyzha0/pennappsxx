@@ -11,10 +11,12 @@ import DataScreen from './datascreen/DataScreen';
 const styles = {
   container: {
     display: 'flex',
-    width: '100%',
-    height: '100%'
+    height: '100%',
+    marginRight: '4rem',
+    borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+    overflowY: 'scroll'
   }
-}
+};
 
 const WebApp = ({}) => {
   return (
