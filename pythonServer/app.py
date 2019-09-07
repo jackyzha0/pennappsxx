@@ -14,7 +14,7 @@ class Command(Resource):
     def post(self):
         json_data = request.get_json(force=True)
         cmd = json_data['command']
-        print("command is: ", cmd)
+        print("commando is: ", cmd)
 
         # TODO: forward this command to the drone proxy
         return {
