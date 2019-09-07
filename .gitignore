@@ -1,1 +1,5 @@
 .test_assets/
+__pycache__/
+*.py[cod]
+*$py.class
+drone_control/restful/h264decoder/Windows
