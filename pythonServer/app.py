@@ -8,6 +8,9 @@ VALID_FLIGHT_PLANS = ['CONE', 'LINE']
 
 # Dashboard Endpoints ---------------------------
 class Status(Resource):
+    '''
+        Dashboard continuously checks up on the status of each drone
+    '''
     def get(self):
         return {
             "result": "OK",
@@ -52,11 +55,11 @@ class Fetch(Resource):
         - True if client clicked deploy
         - False otherwise
     '''
-    status = True
-    job_id = 1
-    flight_plan = "CONE"
-
     def get(self):
+        status = True
+        job_id = 1
+        flight_plan = "CONE"
+
         return {
             "result": "OK",
             "status": status,
@@ -64,7 +67,11 @@ class Fetch(Resource):
             "flight_plan": flight_plan
         }, 200
 
+
 class Info(Resource):
+    '''
+        Drone continuously updates server with its info
+    '''
     def post(self):
         json_data = request.get_json(force=True)
         job_id = json_data['job_id']
