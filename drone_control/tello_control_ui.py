@@ -120,10 +120,10 @@ class TelloUI:
         while arr:
             self.tello.send_command(arr.pop(0))
             time.sleep(5)
+        os.remove('flightpath.txt')
 
     def _sendingCommand(self):
-        while not os.path.isfile('flightpath.txt'):
-            time.sleep(5)
+        if not os.path.isfile('flightpath.txt'):
             URL = "https://pennappsxx.herokuapp.com/fetch"
             r = requests.get(url = URL, params = {})
             data = r.json()
@@ -132,6 +132,7 @@ class TelloUI:
             if data['status'] == True:
                 if data['flight_plan'] == "LINE":
                     self.enqueue(['takeoff','up 50','forward 100','land'])
+            # time.sleep(1)
 
     def sendTelloStatus(self):
         while os.path.isfile('flightpath.txt'):

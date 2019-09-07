@@ -1,0 +1,4 @@
+takeoff
+up 50
+forward 100
+land
