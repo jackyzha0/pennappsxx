@@ -204,10 +204,11 @@ def draw_boxes(filename, v_boxes, v_labels, v_scores):
 		# draw text and score in top left corner
 		label = "%s (%.3f)" % (v_labels[i], v_scores[i])
 		pyplot.text(x1, y1, label, color='white')
-	# show the plot
-	pyplot.show()
+	ax.axis('off')
+	name = filename[:len(filename)-4] + "-result.png"
+	pyplot.savefig(name, bbox_inches='tight', pad_inches = 0)
 
-# How to use this API
+# #How to use this API
 # def main():
 # 	model = TrashModel()
 # 	filename = 'test2.jpg'
