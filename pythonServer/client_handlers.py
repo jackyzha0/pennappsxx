@@ -4,7 +4,6 @@ from flask_restplus import Resource
 VALID_FLIGHT_PLANS = ['CONE', 'LINE']
 
 
-# Dashboard Endpoints ---------------------------
 class Status(Resource):
     '''
         Dashboard continuously checks up on the status of each drone
@@ -21,6 +20,7 @@ class Status(Resource):
                  flight_time: 0, speed: 0}
             ]
         }, 200
+
 
 class Command(Resource):
     '''
@@ -41,7 +41,7 @@ class Command(Resource):
         # TODO: generate job_id
         # TODO: forward this command to the drone proxy
         return {
-            "result": "OK"
+            "result": "OK",
             "job_id": job_id
         }, 200
 
