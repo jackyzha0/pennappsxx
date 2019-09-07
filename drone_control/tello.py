@@ -8,7 +8,7 @@ class Tello:
     """Wrapper class to interact with the Tello drone."""
 
     def __init__(self, local_ip, local_port, imperial=False, command_timeout=.3, tello_ip='192.168.10.1',
-                 tello_port=8889):
+                 tello_port=8889, follower=False, name='no-name'):
         """
         Binds to the local IP/port and puts the Tello into command mode.
 
@@ -20,7 +20,7 @@ class Tello:
         :param tello_ip (str): Tello IP.
         :param tello_port (int): Tello port.
         """
-
+        self.name = name
         self.abort_flag = False
         self.decoder = libh264decoder.H264Decoder()
         self.command_timeout = command_timeout
@@ -44,19 +44,20 @@ class Tello:
 
         self.receive_thread.start()
 
-        # to receive video -- send cmd: command, streamon
-        self.socket.sendto(b'command', self.tello_address)
-        print ('sent: command')
-        self.socket.sendto(b'streamon', self.tello_address)
-        print ('sent: streamon')
+        if not follower:
+            # to receive video -- send cmd: command, streamon
+            self.socket.sendto(b'command', self.tello_address)
+            print ('sent: command')
+            self.socket.sendto(b'streamon', self.tello_address)
+            print ('sent: streamon')
 
-        self.socket_video.bind((local_ip, self.local_video_port))
+            self.socket_video.bind((local_ip, self.local_video_port))
 
-        # thread for receiving video
-        self.receive_video_thread = threading.Thread(target=self._receive_video_thread)
-        self.receive_video_thread.daemon = True
+            # thread for receiving video
+            self.receive_video_thread = threading.Thread(target=self._receive_video_thread)
+            self.receive_video_thread.daemon = True
 
-        self.receive_video_thread.start()
+            self.receive_video_thread.start()
 
     def __del__(self):
         """Closes the local socket."""

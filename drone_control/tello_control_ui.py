@@ -107,21 +107,19 @@ class TelloUI:
             self.panel.image = image
 
     def _enqueue(self, arr):
-        os.remove("drone0.lock")
-        os.remove("drone1.lock")
-        f = open("drone0.lock","w+")
-        f.close()
-        f = open("drone1.lock","w+")
+
+        f = open("flightpath","a")
+        for cmd in arr:
+            f.write(cmd)
         f.close()
 
         while arr:
             self.tello.send_command(arr.pop(0))
             time.sleep(3)
-        # if both locks have been consumed, delete flightpath
 
     def _sendingCommand(self):
-
         while True:
+            print('haha john sucks')
             time.sleep(1)
             URL = "https://pennappsxx.herokuapp.com/fetch"
             r = requests.get(url = URL, params = {})
