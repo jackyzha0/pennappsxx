@@ -11,13 +11,17 @@ import MapIcon from '@material-ui/icons/Map';
 import ListItemText from '@material-ui/core/ListItemText';
 import {makeStyles} from '@material-ui/core/styles';
 import RecentJobs from '../recentjobs/RecentJobs';
+import Logo from './logo.png';
 
 let abortController = new AbortController();
 
 const styles = {
   logo: {
+    display: 'flex',
     height: '5rem',
     width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderBottom: '1px solid #9c9c9c',
     color: '#9c9c9c'
   },
@@ -111,7 +115,7 @@ class NavBar extends Component {
     return (
       <DrawerWrapper>
         <div style={styles.logo}>
-          <h1>Project SID</h1>
+          <img src={Logo} width={75}/>
         </div>
 
         <div style={styles.innerContainer}>

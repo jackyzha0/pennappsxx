@@ -8,6 +8,7 @@ import {Link} from 'react-router-dom';
 
 const styles = {
   topPanel: {
+    flex: 'none',
     height: '30rem',
     width: '100%',
   },
@@ -193,7 +194,7 @@ export default class PlanScreen extends Component {
         </div>
         <div style={{display: "flex", justifyContent: "flex-end", marginTop: "10px", marginRight: "10px", marginBottom: "10px"}}>
         <p style={{marginTop:"12px", marginRight: "25px", color: "white"}}> Selected Flight Pattern: <em style={{color: "ADD8E6", fontWeight: "bold"}}> LINEAR </em> </p>
-          <Link style={styles.navItem} to="/data">
+          <Link style={styles.navItem} to="/images">
             <button className="medium ui green button" onClick={() => this.launchDrones(this.state.flightPlan)}>
               DEPLOY
             </button>
@@ -203,57 +204,3 @@ export default class PlanScreen extends Component {
     )
   }
 }
-
-
-//
-// <List.Item>
-//   <List.Content>
-//     <div style={styles.panel}>
-//       <div style={{display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: "center"}}>
-//         <img class="ui middle aligned small image" src={btello} />
-//         <p> Black Drone EDU #1</p>
-//       </div>
-//
-//       <div style={{width: "100%", display: "flex", justifyContent: "space-between", marginLeft: "250px", marginRight: "250px"}}>
-//         <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
-//           <p><span style={{fontWeight: "bold"}}>Drone ID:</span> 239847987</p>
-//           <p><span style={{fontWeight: "bold"}}>Job ID:</span> 19384791</p>
-//           <p><span style={{fontWeight: "bold"}}>Model:</span> EDU</p>
-//           <p><span style={{fontWeight: "bold"}}>Battery:</span> 100%</p>
-//         </div>
-//         <div style={{display: 'flex', flexFlow: 'column'}}>
-//           <p style={ isActive ? {color:'green'} : {color: 'red'}}> STATUS</p>
-//           <p><span style={{fontWeight: "bold"}}>Flight Time:</span> 3 minutes</p>
-//           <p><span style={{fontWeight: "bold"}}>Speed:</span> 5 km/hour</p>
-//           <p><span style={{fontWeight: "bold"}}>Last Updated Date:</span> 9/7/2019</p>
-//         </div>
-//       </div>
-//
-//     </div>
-//
-//   </List.Content>
-// </List.Item>
-
-// <List.Item>
-// <List.Content>
-// <div style={styles.panel}>
-//   <div style={{textAlign: 'center'}}>
-// <img class="ui small image" src={btello} /> Black Drone EDU #2
-// </div>
-// <div style={{width: "100%", display: "flex", justifyContent: "space-between", marginLeft: "250px", marginRight: "250px"}}>
-// <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
-// <p><span style={{fontWeight: "bold"}}>Drone ID:</span> 239847987</p>
-// <p><span style={{fontWeight: "bold"}}>Job ID:</span> 19384791</p>
-// <p><span style={{fontWeight: "bold"}}>Model:</span> EDU</p>
-// <p><span style={{fontWeight: "bold"}}>Battery:</span> 100%</p>
-// </div>
-// <div style={{display: 'flex', flexFlow: 'column'}}>
-// <p style={ isActive ? {color:'green'} : {color: 'red'}}> STATUS</p>
-// <p><span style={{fontWeight: "bold"}}>Flight Time:</span> 3 minutes</p>
-// <p><span style={{fontWeight: "bold"}}>Speed:</span> 5 km/hour</p>
-// <p><span style={{fontWeight: "bold"}}>Last Updated Date:</span> 9/7/2019</p>
-// </div>
-// </div>
-// </div>
-// </List.Content>
-// </List.Item>

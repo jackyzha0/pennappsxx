@@ -28,38 +28,53 @@ export default class ImageScreen extends Component {
   componentDidMount() {
     this.fetchImages();
     this.interval = setInterval(() => {
-      // console.log('images is ', this.state.images);
       this.fetchImages();
     }, 5000);
   }
 
-  fetchImages() {
-    var pics = [];
-    axios.get('https://www.googleapis.com/storage/v1/b/pennappsxx-drone-unprocessed/o?prefix=processed')
+  async fetchImages() {
+    const URL = 'https://www.googleapis.com/storage/v1/b/pennappsxx-drone-unprocessed/o?prefix=processed';
+    let response = await fetch(URL, { method: 'GET' });
+    let data = await response.json();
+
+    const names = data.items.map(item => {
+      return item.name.replace(/\//g, "%2F");
+    });
+
+    const urls = names.map(name => {
+      return 'https://www.googleapis.com/storage/v1/b/pennappsxx-drone-unprocessed/o/' + name + '?alt=media';
+    });
+
+    const promises = urls.map(url => {
+      return fetch(url, { method: 'GET' });
+    });
+
+    Promise.all(promises)
       .then(res => {
-        for (var i in res.data.items) {
-          const name = res.data.items[i].name.replace(/\//g, "%2F");
-          const url = 'https://www.googleapis.com/storage/v1/b/pennappsxx-drone-unprocessed/o/' + name + '?alt=media';
-          console.log(url);
-          axios.get(url)
-            .then(res => {
-              pics.push(res);
-            });
-        }
+        console.log(res);
+        this.setState({ images: res })
       })
-      .then(() => {this.setState({ images: pics })})
-      .catch(err => console.log(err));
-    // this.setState({ images: pics });
+      .catch(err => console.log('error', err))
   }
 
   render() {
+    const urls = this.state.images.map(img => img.url);
+    const json_file = urls.filter(url => {return url.indexOf('.json') > -1});
+    const filtered_img = urls.filter(url => {return url.indexOf('.json') === -1});
+    const new_urls = filtered_img.map(url => {
+      return {
+        src: url,
+        width: 1,
+        height: 1
+      }
+    });
+    console.log("JSON IS ", json_file);
+    // console.log(JSON.parse(json_file));
+
     return (
       <div className="page-container">
-        <div style={styles.statusBar}>
-          <p>progress details about the mission go here</p>
-        </div>
         <div className="gallery">
-          <Gallery photos={this.state.images} targetRowHeight={100}/>
+          <Gallery photos={new_urls} targetRowHeight={150}/>
         </div>
       </div>
     )
