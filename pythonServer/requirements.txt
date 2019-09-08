@@ -10,6 +10,7 @@ coverage==4.5.1
 factory-boy==2.10.0
 Faker==0.8.11
 Flask==0.12.2
+Flask-Cors==3.0.8
 flask-restplus==0.10.1
 Flask-Script==2.0.5
 Flask-SocketIO==4.2.1

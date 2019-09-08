@@ -4,12 +4,14 @@ import datetime
 from flask import Flask, request
 from flask_restplus import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
 

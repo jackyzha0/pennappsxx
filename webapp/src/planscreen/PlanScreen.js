@@ -16,10 +16,48 @@ const styles = {
   }
 };
 
+let abortController = new AbortController();
+
 export default class PlanScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      status: []
+    };
+
+    this.getStatus = this.getStatus.bind(this);
   }
+
+  componentDidMount() {
+    // begin polling
+    this.timer = setInterval(()=> this.getStatus(), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    this.timer = null;
+  }
+
+  async getStatus() {
+    // abortable fetch for safe polling
+    abortController.abort(); // Cancel the previous request
+    abortController = new AbortController();
+
+    try {
+      const URL = 'https://pennappsxx.herokuapp.com/status';
+      let response = await fetch(URL, { signal: abortController.signal });
+      let data = await response.json();
+      console.log('data is ', data);
+      this.setState({ status: data.status });
+    }
+    catch (ex) {
+      if (ex.name === 'AbortError') {
+        return; // Continuation logic has already been skipped, so return normally
+      }
+
+      throw ex;
+    }
+  };
 
   render() {
     return (
