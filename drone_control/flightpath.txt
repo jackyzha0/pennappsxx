@@ -1,4 +1,4 @@
 takeoff
-up 50
+up 100
 forward 100
 land
