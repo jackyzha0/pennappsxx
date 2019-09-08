@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import wtello from './tello.png';
 import btello from './blacktello.png';
-import background from './grey.jpg';
 import Carousel from 'react-bootstrap/Carousel';
+import { List, Segment } from 'semantic-ui-react'
 
 const styles = {
   topPanel: {
@@ -53,36 +53,27 @@ export default class PlanScreen extends Component {
         </div>
 
         <div style={styles.botPanel}>
-          <h1>List 1</h1>
-          <div class="ui list">
-            <div class="item">
-              <i class="users icon"></i>
-              <div class="content">
-                Semantic UI
-              </div>
-            </div>
-            <div class="item">
-              <i class="marker icon"></i>
-              <div class="content">
-                New York, NY
-              </div>
-            </div>
-            <div class="item">
-              <i class="mail icon"></i>
-              <div class="content">
-                <a href="mailto:jack@semantic-ui.com">jack@semantic-ui.com</a>
-              </div>
-            </div>
-            <div class="item">
-              <i class="linkify icon"></i>
-              <div class="content">
-                <a href="http://www.semantic-ui.com">semantic-ui.com</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style={styles.botPanel}>
-          <h1>List 2</h1>
+          <Segment inverted>
+            <List divided inverted relaxed>
+              <List.Item>
+                <List.Content>
+                  <List.Header>Snickerdoodle</List.Header>
+                  An excellent companion
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content>
+                  <List.Header>Poodle</List.Header>A poodle, its pretty basic
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content>
+                  <List.Header>Paulo</List.Header>
+                  He's also a dog
+                </List.Content>
+              </List.Item>
+            </List>
+          </Segment>
         </div>
       </div>
 
