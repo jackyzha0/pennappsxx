@@ -17,17 +17,21 @@ api = Api(app)
 db = SQLAlchemy(app)
 
 VALID_FLIGHT_PLANS = ['CONE', 'LINE']
-JOB_QUEUE = [] # a temporary cache of pending jobs
 
 # DB Stuff ----------------------------
-class Jobs(db.Model):
+class JobQueue(db.Model):
+    __tablename__  = 'job_queue'
+    job_id =                db.Column(db.String(20), primary_key=True)
+    flight_plan =           db.Column(db.String(20), nullable=False)
+
+class Jobs(db.Model):       # historical record of jobs
     __tablename__ = 'jobs'
     job_id =                db.Column(db.String(20), primary_key=True)
     flight_plan =           db.Column(db.String(20), nullable=False)
     job_created_date =      db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-class Status(db.Model):
-    __tablename__ = 'status'
+class DroneStatus(db.Model):
+    __tablename__ = 'drone_status'
     drone_id =              db.Column(db.Integer, primary_key=True)
     job_id =                db.Column(db.String(20), nullable=False)
     model =                 db.Column(db.String(50), nullable=False)
@@ -44,7 +48,7 @@ class Status(Resource):
     '''
     def get(self):
         result = []
-        status = Status.query.all()
+        status = DroneStatus.query.all()
         for s in status:
             result.append({
                 drone_id: s.drone_id,
@@ -76,13 +80,15 @@ class Command(Resource):
                 "result": "error"
             }, 400
 
-        job_id = uuid.uuid4() # randomly generate uuid
-        job = Jobs(job_id, flight_plan)
+        job_id = str(uuid.uuid4()) # randomly generate uuid
+        job = Jobs(job_id=job_id, flight_plan=flight_plan)
         db.session.add(job)
         db.session.commit()
 
-        JOB_QUEUE.append({ job_id, flight_plan })
-        print("DEBUG:", JOB_QUEUE)
+        # add to job queue
+        job_queue_entry = JobQueue(job_id=job_id, flight_plan=flight_plan)
+        db.session.add(job_queue_entry)
+        db.session.commit()
 
         return {
             "result": "OK",
@@ -97,27 +103,41 @@ class Fetch(Resource):
         - False otherwise
     '''
     def get(self):
-
-        if len(JOB_QUEUE) == 0:
+        # queue_length = JobQueue.count()
+        queue_length = JobQueue.query.count()
+        if queue_length == 0:
             return {
                 "result": "OK",
                 "status": False,
-                "job_id": 0,
+                "job_id": "",
                 "flight_plan": ""
             }, 200
 
-        job = JOB_QUEUE.pop(0)
-        print("DEBUG:", JOB_QUEUE)
+        # get the next job in the queue, and start it
+        job = JobQueue.query.limit(1).all()
+        job_id = job[0].job_id
+        flight_plan= job[0].flight_plan
+        print("DEBUG2:", job[0])
+        db.session.delete(job[0])
+        db.session.commit()
 
         return {
             "result": "OK",
             "status": True,
-            "job_id": job.job_id,
-            "flight_plan": job.flight_plan
+            "job_id": job_id,
+            "flight_plan": flight_plan
         }, 200
 
 
 class Info(Resource):
+    '''
+        Dashboard queries for drone status
+    '''
+    def get(self):
+        return {
+            "result": "OK"
+        }, 200
+
     '''
         Drone continuously updates server with its info
     '''
@@ -131,7 +151,7 @@ class Info(Resource):
         flight_time =   json_data['flight_time']
         speed =         json_data['speed']
 
-        status = Status(drone_id, model, job_id, active, battery, flight_time, speed)
+        status = DroneStatus(drone_id, model, job_id, active, battery, flight_time, speed)
         db.session.add(status)
         db.session.commit()
 
