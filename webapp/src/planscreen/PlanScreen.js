@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import wtello from './tello.png';
 import btello from './blacktello.png';
-import background from './grey.jpg';
 import Carousel from 'react-bootstrap/Carousel';
 
 const styles = {

@@ -40,14 +40,14 @@ export default class ImageScreen extends Component {
 
   mockList = () => {
     var images = [];
-    for(var i=0;i<20;i++) {
-      const image = {
-        src: require('./test2.JPG'),
-        width: 1,
-        height: 1
-      };
-      images.push(image);
-    }
+    // for(var i=0;i<20;i++) {
+    //   const image = {
+    //     src: require('./test2.JPG'),
+    //     width: 1,
+    //     height: 1
+    //   };
+    //   images.push(image);
+    // }
     return images;
   }
 
