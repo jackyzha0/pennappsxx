@@ -22,10 +22,12 @@ export default class PlanScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: []
+      status: [],
+      flightPlan: 'LINE'
     };
 
     this.getStatus = this.getStatus.bind(this);
+    this.launchDrones = this.launchDrones.bind(this);
   }
 
   componentDidMount() {
@@ -59,9 +61,18 @@ export default class PlanScreen extends Component {
     }
   };
 
+  async launchDrones(flight_plan) {
+    const URL = 'https://pennappsxx.herokuapp.com/command';
+    const body = JSON.stringify({ flight_plan });
+
+    let response = await fetch(URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body });
+    let data = await response.json();
+
+    console.log('JOB ID IS:', data.job_id);
+  }
+
   render() {
     return (
-
       <div className="page-container">
         <div style={styles.topPanel}>
           <Carousel style={{height: "100%"}}>
@@ -109,14 +120,12 @@ export default class PlanScreen extends Component {
                   <List.Header>Paulo</List.Header>
                   He's also a dog
                 </List.Content>
+                <button onClick={() => this.launchDrones(this.state.flightPlan)}>click me</button>
               </List.Item>
             </List>
           </Segment>
         </div>
       </div>
-
-
-
     )
   }
 }
