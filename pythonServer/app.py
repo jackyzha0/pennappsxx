@@ -17,6 +17,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
 
 api = Api(app)
 db = SQLAlchemy(app)
+db.create_all()
 
 VALID_FLIGHT_PLANS = ['CONE', 'LINE']
 
@@ -35,12 +36,10 @@ class Jobs(db.Model):       # historical record of jobs
 class DroneStatus(db.Model):
     __tablename__ = 'drone_status'
     drone_id =              db.Column(db.Integer, primary_key=True)
-    job_id =                db.Column(db.String(20), nullable=False)
+#     job_id =                db.Column(db.String(20), nullable=False)
     model =                 db.Column(db.String(50), nullable=False)
     active =                db.Column(db.Boolean, default=False)
     battery =               db.Column(db.Float, default=0.0)
-    flight_time =           db.Column(db.Float, default=0.0)
-    speed =                 db.Column(db.Float, default=0.0)
     last_updated_date =     db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
 # Dashboard Stuff ---------------------
@@ -57,8 +56,6 @@ class Status(Resource):
                 model: s.model,
                 active: s.active,
                 battery: s.battery,
-                flight_time: s.flight_time,
-                speed: s.speed
             })
 
         return {
@@ -72,7 +69,6 @@ class Command(Resource):
         Dashboard submits a flight plan to initiate drone mission.
         - returns the job_id
     '''
-
     def post(self):
         json_data = request.get_json(force=True)
         flight_plan = json_data['flight_plan']
@@ -140,7 +136,7 @@ class Fetch(Resource):
         # get the next job in the queue, and start it
         job = JobQueue.query.limit(1).all()
         job_id = job[0].job_id
-        flight_plan= job[0].flight_plan
+        flight_plan = job[0].flight_plan
         print("DEBUG2:", job[0])
         db.session.delete(job[0])
         db.session.commit()
@@ -169,17 +165,14 @@ class Info(Resource):
         json_data =     request.get_json(force=True)
         drone_id =      json_data['drone_id']
         model =         json_data['model']
-        job_id =        json_data['job_id']
         active =        json_data['active']
         battery =       json_data['battery']
-        flight_time =   json_data['flight_time']
-        speed =         json_data['speed']
 
-        status = DroneStatus(drone_id, model, job_id, active, battery, flight_time, speed)
+        status = DroneStatus(drone_id, model, active, battery)
         db.session.add(status)
         db.session.commit()
 
-        print('DEBUG:', drone_id, model, job_id, active, battery, flight_time, speed)
+        print('DEBUG:', drone_id, model, active, battery)
         return {
             "result": "OK"
         }, 200
