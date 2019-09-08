@@ -130,9 +130,6 @@ class TelloUI:
                 self.takeSnapshot()
             self.tello.send_command('land')
 
-        time.sleep(5)
-        os.remove('flightpath.txt')
-
     def _sendingCommand(self):
         if not os.path.isfile('flightpath.txt'):
             URL = "https://pennappsxx.herokuapp.com/fetch"
@@ -147,20 +144,22 @@ class TelloUI:
             # time.sleep(1)
 
     def sendTelloStatus(self):
-        while os.path.isfile('flightpath.txt'):
+        while True:
+            print('Tello Status Update from Leader')
+            if os.path.isfile('flightpath.txt'):
+                #send tello status to server
+                t = self.tello
+                URL = "https://penappsxx.herokuapp.com/info/"
+                data = {
+                    'drone_id': t.address[0],
+                    'active': True,
+                    'battery': t.get_battery(),
+                    'flight_time': t.get_flight_time(),
+                    'speed': t.get_speed(),
+                    'model': 'tello'
+                }
+                r = requests.post(url = URL, data = data)
             time.sleep(5)
-            #send tello status to server
-            t = self.tello
-            URL = "https://penappsxx.herokuapp.com/info/"
-            data = {
-                'drone_id': t.address[0],
-                'active': True,
-                'battery': t.get_battery(),
-                'flight_time': t.get_flight_time(),
-                'speed': t.get_speed(),
-                'model': 'tello'
-            }
-            r = requests.post(url = URL, data = data)
 
     def _setQuitWaitingFlag(self):
         """
