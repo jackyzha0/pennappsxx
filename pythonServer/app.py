@@ -15,8 +15,12 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
 
+
 api = Api(app)
 db = SQLAlchemy(app)
+
+db.drop_all()
+db.create_all()
 
 VALID_FLIGHT_PLANS = ['CONE', 'LINE']
 
@@ -106,7 +110,7 @@ class RecentJobs(Resource):
             result.append({
                 "job_id": j.job_id,
                 "flight_plan": j.flight_plan,
-                "job_created_date": j.job_created_date
+                "job_created_date": str(j.job_created_date)
             })
 
         return {

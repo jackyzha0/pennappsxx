@@ -4,6 +4,7 @@ import btello from './blacktello.png';
 import linear from './line-chart.png';
 import Carousel from 'react-bootstrap/Carousel';
 import { List, Segment, Button, Label } from 'semantic-ui-react'
+import {Link} from 'react-router-dom';
 
 const styles = {
   topPanel: {
@@ -20,9 +21,33 @@ const styles = {
     justifyContent: "space-between",
     display: "flex",
     flexFlow: "row",
+  }
+};
+
+const MOCK_DRONES = [
+  {
+    model: 'Tello',
+    drone_id: '19233353392',
+    active: true,
+    battery: '0.93',
+    last_updated_date: '2019-09-08 07:19:58'
+  },
+  {
+    model: 'Tello EDU',
+    drone_id: '445348232373',
+    active: true,
+    battery: '0.74',
+    last_updated_date: '2019-09-08 07:21:26'
+  },
+  {
+    model: 'Tello EDU',
+    drone_id: '32219458839',
+    active: true,
+    battery: '0.89',
+    last_updated_date: '2019-09-08 07:30:00'
   },
 
-};
+];
 
 let abortController = new AbortController();
 
@@ -55,7 +80,7 @@ export default class PlanScreen extends Component {
       const URL = 'https://pennappsxx.herokuapp.com/status';
       let response = await fetch(URL, { signal: abortController.signal });
       let data = await response.json();
-      console.log('data is ', data);
+      console.log('status is ', data);
       this.setState({ status: data.status });
     }
     catch (ex) {
@@ -102,93 +127,66 @@ export default class PlanScreen extends Component {
         <div style={styles.botPanel}>
           <Segment inverted>
             <List divided inverted relaxed>
-              <List.Item>
-                <List.Content>
+              {!!this.state.status && this.state.status.map((drone, id) => (
+                <List.Item key={id}>
+                  <List.Content>
+                    <div style={styles.panel}>
 
-                  <div style={styles.panel}>
-                    <div style={{textAlign: 'center'}}>
-                    <img class="ui small image" src={wtello} /> White Tello Drone
-                    </div>
-
-                    <div style={{width: "100%", display: "flex", justifyContent: "space-between", marginLeft: "250px", marginRight: "250px"}}>
-                      <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
-                        <p><p style={{fontWeight: "bold"}}>Drone ID:</p> 239847987</p>
-                        <p><p style={{fontWeight: "bold"}}>Job ID:</p> 19384791</p>
-                        <p><p style={{fontWeight: "bold"}}>Model:</p> EDU</p>
-                        <p><p style={{fontWeight: "bold"}}>Battery:</p> 100%</p>
+                      <div style={{textAlign: 'center'}}>
+                        <img className="ui small image" src={(drone.model === 'Tello') ? wtello : btello} width={100} />
+                        {drone.model}
                       </div>
-                      <div style={{display: 'flex', flexFlow: 'column'}}>
-                         <p style={ isActive ? {color:'green'} : {color: 'red'}}> STATUS</p>
-                         <p><p style={{fontWeight: "bold"}}>Flight Time:</p> 3 minutes</p>
-                         <p><p style={{fontWeight: "bold"}}>Speed:</p> 5 km/hour</p>
-                         <p><p style={{fontWeight: "bold"}}>Last Updated Date:</p> 9/7/2019</p>
+
+                      <div style={{width: "100%", display: "flex", marginLeft:'2rem', justifyContent: 'space-between'}}>
+                        <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
+                          <p><span style={{fontWeight: "bold"}}>Drone ID: </span>{drone.drone_id}</p>
+                          <p><span style={{fontWeight: "bold"}}>Model: </span>{drone.model}</p>
+                          <p><span style={{fontWeight: "bold"}}>Battery: </span>{drone.battery}</p>
+                        </div>
+
+                        <div style={{display: 'flex', flexFlow: 'column', textAlign: 'right'}}>
+                          <p style={ drone.active ? {color:'lightgreen'} : {color: 'red'}}>STATUS: {drone.active ? "online" : "offline"}</p>
+                          <p><span style={{fontWeight: "bold"}}>Last Updated Date:</span>{drone.last_updated_date}</p>
+                        </div>
+                      </div>
+
+                    </div>
+                  </List.Content>
+                </List.Item>
+              ))}
+              {MOCK_DRONES.map((drone, id) => (
+                <List.Item key={id}>
+                  <List.Content>
+                    <div style={styles.panel}>
+                      <div style={{textAlign: 'center'}}>
+                        <img className="ui small image" src={(drone.model === 'Tello') ? wtello : btello} width={100} />
+                        {drone.model}
+                      </div>
+                      <div style={{width: "100%", display: "flex", marginLeft:'2rem',  justifyContent: 'space-between'}}>
+                        <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
+                          <p><span style={{fontWeight: "bold"}}>Drone ID: </span> {drone.drone_id}</p>
+                          <p><span style={{fontWeight: "bold"}}>Model: </span>{drone.model}</p>
+                          <p><span style={{fontWeight: "bold"}}>Battery: </span>{drone.battery}</p>
+                        </div>
+                        <div style={{display: 'flex', flexFlow: 'column', textAlign: 'right'}}>
+                          <p style={ drone.active ? {color:'lightgreen'} : {color: 'red'}}>STATUS: {drone.active ? "online" : "offline"}</p>
+                          <p><span style={{fontWeight: "bold"}}>Last Updated Date:</span>{drone.last_updated_date}</p>
+                        </div>
                       </div>
                     </div>
-
-                  </div>
-                </List.Content>
-              </List.Item>
-
-              <List.Item>
-                <List.Content>
-
-                <div style={styles.panel}>
-                  <div style={{textAlign: 'center', flexDirection: "row", alignItems: "center"}}>
-                  <img class="ui middle aligned small image" src={btello} />
-                  <p> Black Drone EDU #1</p>
-                  </div>
-
-                  <div style={{width: "100%", display: "flex", justifyContent: "space-between", marginLeft: "250px", marginRight: "250px"}}>
-                    <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
-                      <p><p style={{fontWeight: "bold"}}>Drone ID:</p> 239847987</p>
-                      <p><p style={{fontWeight: "bold"}}>Job ID:</p> 19384791</p>
-                      <p><p style={{fontWeight: "bold"}}>Model:</p> EDU</p>
-                      <p><p style={{fontWeight: "bold"}}>Battery:</p> 100%</p>
-                    </div>
-                    <div style={{display: 'flex', flexFlow: 'column'}}>
-                       <p style={ isActive ? {color:'green'} : {color: 'red'}}> STATUS</p>
-                       <p><p style={{fontWeight: "bold"}}>Flight Time:</p> 3 minutes</p>
-                       <p><p style={{fontWeight: "bold"}}>Speed:</p> 5 km/hour</p>
-                       <p><p style={{fontWeight: "bold"}}>Last Updated Date:</p> 9/7/2019</p>
-                    </div>
-                  </div>
-
-                </div>
-
-                </List.Content>
-              </List.Item>
-
-              <List.Item>
-                <List.Content>
-                <div style={styles.panel}>
-                  <div style={{textAlign: 'center'}}>
-                  <img class="ui small image" src={btello} /> Black Drone EDU #2
-                  </div>
-                  <div style={{width: "100%", display: "flex", justifyContent: "space-between", marginLeft: "250px", marginRight: "250px"}}>
-                    <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
-                      <p><p style={{fontWeight: "bold"}}>Drone ID:</p> 239847987</p>
-                      <p><p style={{fontWeight: "bold"}}>Job ID:</p> 19384791</p>
-                      <p><p style={{fontWeight: "bold"}}>Model:</p> EDU</p>
-                      <p><p style={{fontWeight: "bold"}}>Battery:</p> 100%</p>
-                    </div>
-                    <div style={{display: 'flex', flexFlow: 'column'}}>
-                       <p style={ isActive ? {color:'green'} : {color: 'red'}}> STATUS</p>
-                       <p><p style={{fontWeight: "bold"}}>Flight Time:</p> 3 minutes</p>
-                       <p><p style={{fontWeight: "bold"}}>Speed:</p> 5 km/hour</p>
-                       <p><p style={{fontWeight: "bold"}}>Last Updated Date:</p> 9/7/2019</p>
-                    </div>
-                  </div>
-                </div>
-                </List.Content>
-              </List.Item>
+                  </List.Content>
+                </List.Item>
+              ))}
             </List>
           </Segment>
         </div>
         <div style={{display: "flex", justifyContent: "flex-end", marginTop: "10px", marginRight: "10px", marginBottom: "10px"}}>
         <p style={{marginTop:"12px", marginRight: "25px", color: "white"}}> Selected Flight Pattern: <em style={{color: "ADD8E6", fontWeight: "bold"}}> LINEAR </em> </p>
-        <button class="medium ui green button">
-          DEPLOY
-        </button>
+          <Link style={styles.navItem} to="/data">
+            <button className="medium ui green button" onClick={() => this.launchDrones(this.state.flightPlan)}>
+              DEPLOY
+            </button>
+          </Link>
         </div>
       </div>
 
@@ -197,3 +195,57 @@ export default class PlanScreen extends Component {
     )
   }
 }
+
+
+//
+// <List.Item>
+//   <List.Content>
+//     <div style={styles.panel}>
+//       <div style={{display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: "center"}}>
+//         <img class="ui middle aligned small image" src={btello} />
+//         <p> Black Drone EDU #1</p>
+//       </div>
+//
+//       <div style={{width: "100%", display: "flex", justifyContent: "space-between", marginLeft: "250px", marginRight: "250px"}}>
+//         <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
+//           <p><span style={{fontWeight: "bold"}}>Drone ID:</span> 239847987</p>
+//           <p><span style={{fontWeight: "bold"}}>Job ID:</span> 19384791</p>
+//           <p><span style={{fontWeight: "bold"}}>Model:</span> EDU</p>
+//           <p><span style={{fontWeight: "bold"}}>Battery:</span> 100%</p>
+//         </div>
+//         <div style={{display: 'flex', flexFlow: 'column'}}>
+//           <p style={ isActive ? {color:'green'} : {color: 'red'}}> STATUS</p>
+//           <p><span style={{fontWeight: "bold"}}>Flight Time:</span> 3 minutes</p>
+//           <p><span style={{fontWeight: "bold"}}>Speed:</span> 5 km/hour</p>
+//           <p><span style={{fontWeight: "bold"}}>Last Updated Date:</span> 9/7/2019</p>
+//         </div>
+//       </div>
+//
+//     </div>
+//
+//   </List.Content>
+// </List.Item>
+
+// <List.Item>
+// <List.Content>
+// <div style={styles.panel}>
+//   <div style={{textAlign: 'center'}}>
+// <img class="ui small image" src={btello} /> Black Drone EDU #2
+// </div>
+// <div style={{width: "100%", display: "flex", justifyContent: "space-between", marginLeft: "250px", marginRight: "250px"}}>
+// <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
+// <p><span style={{fontWeight: "bold"}}>Drone ID:</span> 239847987</p>
+// <p><span style={{fontWeight: "bold"}}>Job ID:</span> 19384791</p>
+// <p><span style={{fontWeight: "bold"}}>Model:</span> EDU</p>
+// <p><span style={{fontWeight: "bold"}}>Battery:</span> 100%</p>
+// </div>
+// <div style={{display: 'flex', flexFlow: 'column'}}>
+// <p style={ isActive ? {color:'green'} : {color: 'red'}}> STATUS</p>
+// <p><span style={{fontWeight: "bold"}}>Flight Time:</span> 3 minutes</p>
+// <p><span style={{fontWeight: "bold"}}>Speed:</span> 5 km/hour</p>
+// <p><span style={{fontWeight: "bold"}}>Last Updated Date:</span> 9/7/2019</p>
+// </div>
+// </div>
+// </div>
+// </List.Content>
+// </List.Item>

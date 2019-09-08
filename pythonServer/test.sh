@@ -6,6 +6,8 @@ curl -X POST -H "Content-Type: application/json" \
 
 curl -X GET http://localhost:8000/fetch
 
+curl -X GET http://localhost:8000/jobs
+
 curl -X POST -H "Content-Type: application/json" \
   -d '{"drone_id":"1920003302","model":"TELLO EDU","active":true,"battery":5.3}' \
   http://localhost:8000/info
