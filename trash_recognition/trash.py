@@ -22,7 +22,7 @@ class TrashModel:
 		# define the anchors
 		anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119], [10,13, 16,30, 33,23]]
 		# define the probability threshold for detected objects
-		class_threshold = 0.5
+		class_threshold = 0.2
 		boxes = list()
 		for i in range(len(yhat)):
 			# decode the output of the network
