@@ -4,7 +4,7 @@ from tello_control_ui import TelloUI
 
 def main():
 
-    drone = tello.Tello('', 8889)
+    drone = tello.Tello('', 8888)
     vplayer = TelloUI(drone,"./img/")
 
 	# start the Tkinter mainloop
