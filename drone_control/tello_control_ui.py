@@ -140,7 +140,7 @@ class TelloUI:
             if data['status'] == True:
                 if data['flight_plan'] == "LINE":
                     # self.enqueue(['takeoff','up 50','flip f','land'],['takeoff','up 50','forward 100','land'])
-                    self.enqueue(['takeoff','up 75','forward 75','land'],['takeoff','up 100','forward 75','forward 75','land'])
+                    self.enqueue(['takeoff','up 75','forward 75','land'],['takeoff','up 25','forward 75','forward 75','land'])
 
     def sendTelloStatus(self):
         while True:
