@@ -42,12 +42,18 @@ body {
 }
 
 .Arrow {
+  margin-left: 2rem;
+  margin-right: 2rem;
   width: 100px;
   height: 100px;
   position: relative;
   animation-name: arrow-up;
   animation-duration: 4s;
   animation-iteration-count: infinite;
+}
+
+.carousel-inner {
+  height: 100%;
 }
 
 @keyframes arrow-up {
