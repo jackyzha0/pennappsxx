@@ -5,6 +5,9 @@ from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 from matplotlib import pyplot
 from matplotlib.patches import Rectangle
+import os
+from os import walk
+import json
 
 class TrashModel:
 	def __init__(self):
@@ -183,9 +186,9 @@ def get_boxes(boxes, labels, thresh):
 	return v_boxes, v_labels, v_scores
  
 # draw all results
-def draw_boxes(filename, v_boxes, v_labels, v_scores):
+def draw_boxes(path, filename, v_boxes, v_labels, v_scores):
 	# load the image
-	data = pyplot.imread(filename)
+	data = pyplot.imread(path)
 	# plot the image
 	pyplot.imshow(data)
 	# get the context for drawing boxes
@@ -206,18 +209,51 @@ def draw_boxes(filename, v_boxes, v_labels, v_scores):
 		pyplot.text(x1, y1, label, color='white')
 	ax.axis('off')
 	name = filename[:len(filename)-4] + "-result.png"
-	pyplot.savefig(name, bbox_inches='tight', pad_inches = 0)
+	pyplot.savefig("/Users/hayden/TrashModel/processed/"+name, bbox_inches='tight', pad_inches = 0)
 
-# #How to use this API
-# def main():
-# 	model = TrashModel()
-# 	filename = 'test2.jpg'
-# 	v_boxes, v_labels, v_scores = model.predict(filename)
-# 	# summarize what we found
-# 	for i in range(len(v_boxes)):
-# 		print(v_labels[i], v_scores[i])
-# 	# draw what we found
-# 	draw_boxes(filename, v_boxes, v_labels, v_scores)
+if __name__== "__main__":
+	model = TrashModel()
+	# # Testing
+	# filename = 'test2.jpg'
+	# v_boxes, v_labels, v_scores = model.predict(filename)
+	# # summarize what we found
+	# for i in range(len(v_boxes)):
+	# 	print(v_labels[i], v_scores[i])
+	# # draw what we found
+	# draw_boxes(filename, v_boxes, v_labels, v_scores)
 
-# if __name__== "__main__":
-# 	main()
+	while True:
+		#copy items in gs bucket into local dir
+		os.system("gsutil -m rsync -d -r gs://pennappsxx-drone-unprocessed/unprocessed /Users/hayden/TrashModel/raw/")
+		#clear gs bucket folder
+		os.system("gsutil -m rm gs://pennappsxx-drone-unprocessed/unprocessed/*.jpg")
+		#get all file names of items in local dir 
+		fnames = []
+		for (dirpath, dirnames, filenames) in walk("/Users/hayden/TrashModel/raw/"):
+			fnames.extend(filenames)
+			break
+		#process each image
+		for name in fnames:
+			print("found images!")
+			#don't try to process .json file
+			if name == 'found.json':
+				continue
+			# find trash in image
+			v_boxes, v_labels, v_scores = model.predict("/Users/hayden/TrashModel/raw/" + name)
+
+			# record what we found in json file
+			objects = []
+			for i in range(len(v_boxes)):
+		 		objects.append((v_labels[i], v_scores[i]))
+			entry = {name: objects}
+			with open('/Users/hayden/TrashModel/processed/found.json') as f:
+				data = json.load(f)
+			data.update(entry)
+			with open('/Users/hayden/TrashModel/processed/found.json', 'w') as f:
+				json.dump(data, f)
+
+			# draw what we found
+			draw_boxes("/Users/hayden/TrashModel/raw/" + name, name, v_boxes, v_labels, v_scores)
+		
+		#update gs bucket with new processed images
+		os.system("gsutil rsync -d -r /Users/hayden/TrashModel/processed/ gs://pennappsxx-drone-unprocessed/processed")
