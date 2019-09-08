@@ -18,7 +18,7 @@ const styles = {
   }
 };
 
-const WebApp = ({}) => {
+const WebApp = () => {
   return (
     <div className="App">
       <Router history={history}>

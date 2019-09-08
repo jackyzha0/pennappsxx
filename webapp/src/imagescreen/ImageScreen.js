@@ -17,12 +17,18 @@ export default class ImageScreen extends Component {
 
     this.state = {
       images: []
-    }
+    };
+    this.fetchImages = this.fetchImages.bind(this);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   componentDidMount() {
     this.fetchImages();
     this.interval = setInterval(() => {
+      // console.log('images is ', this.state.images);
       this.fetchImages();
     }, 5000);
   }
@@ -34,18 +40,16 @@ export default class ImageScreen extends Component {
         for (var i in res.data.items) {
           const name = res.data.items[i].name.replace(/\//g, "%2F");
           const url = 'https://www.googleapis.com/storage/v1/b/pennappsxx-drone-unprocessed/o/' + name + '?alt=media';
+          console.log(url);
           axios.get(url)
             .then(res => {
               pics.push(res);
             });
         }
-      });
-    console.log(pics);
-    this.setState({ images: pics });
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
+      })
+      .then(() => {this.setState({ images: pics })})
+      .catch(err => console.log(err));
+    // this.setState({ images: pics });
   }
 
   render() {
@@ -55,7 +59,7 @@ export default class ImageScreen extends Component {
           <p>progress details about the mission go here</p>
         </div>
         <div className="gallery">
-          <Gallery photos={this.state.images} targetRowHeight={300}/>
+          <Gallery photos={this.state.images} targetRowHeight={100}/>
         </div>
       </div>
     )

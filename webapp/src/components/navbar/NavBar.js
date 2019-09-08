@@ -95,7 +95,7 @@ class NavBar extends Component {
       const URL = 'https://pennappsxx.herokuapp.com/jobs';
       let response = await fetch(URL, { signal: abortController.signal });
       let data = await response.json();
-      console.log('data is ', data.recentJobs);
+      // console.log('data is ', data.recentJobs);
       this.setState({ recentJobs: data.recentJobs });
     }
     catch (ex) {
