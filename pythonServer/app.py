@@ -15,8 +15,12 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
 
+
 api = Api(app)
 db = SQLAlchemy(app)
+
+db.drop_all()
+db.create_all()
 
 VALID_FLIGHT_PLANS = ['CONE', 'LINE']
 
