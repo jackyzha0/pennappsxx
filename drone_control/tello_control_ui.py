@@ -9,6 +9,7 @@ import os
 import time
 import platform
 import requests
+from google.cloud import storage
 
 class TelloUI:
     """Wrapper class to enable the GUI."""
@@ -41,14 +42,10 @@ class TelloUI:
         self.panel = None
 
         # create buttons
-        self.btn_snapshot = tki.Button(self.root, text="Snapshot!",
+        self.btn_snapshot = tki.Button(self.root, text="Take picture!",
                                        command=self.takeSnapshot)
         self.btn_snapshot.pack(side="bottom", fill="both",
                                expand="yes", padx=10, pady=5)
-
-        self.btn_pause = tki.Button(self.root, text="Pause", relief="raised", command=self.pauseVideo)
-        self.btn_pause.pack(side="bottom", fill="both",
-                            expand="yes", padx=10, pady=5)
 
         # start a thread that constantly pools the video sensor for
         # the most recently read frame
@@ -100,7 +97,8 @@ class TelloUI:
         Main operation to initial the object of image,and update the GUI panel
         """
         # image = TelloUI.crop(ImageTk.PhotoImage(image))
-        image = ImageTk.PhotoImage(image.crop((0,0,960,500)))
+        # image = ImageTk.PhotoImage(image.crop((0,0,960,500)))
+        image = ImageTk.PhotoImage(image)
         # if the panel none ,we need to initial it
         if self.panel is None:
             self.panel = tki.Label(image=image)
@@ -111,15 +109,28 @@ class TelloUI:
             self.panel.configure(image=image)
             self.panel.image = image
 
-    def enqueue(self, arr):
+    def enqueue(self, arr, self_arr = None):
         f = open('flightpath.txt', 'w+')
         for cmd in arr:
             f.write(cmd + '\n')
         f.close()
 
-        while arr:
-            self.tello.send_command(arr.pop(0))
-            time.sleep(5)
+        if self_arr:
+            while len(self_arr) > 1:
+                time.sleep(2)
+                self.tello.send_command(self_arr.pop(0))
+                time.sleep(3)
+                self.takeSnapshot()
+            self.tello.send_command('land')
+        else:
+            while len(arr) > 1:
+                time.sleep(2)
+                self.tello.send_command(arr.pop(0))
+                time.sleep(3)
+                self.takeSnapshot()
+            self.tello.send_command('land')
+
+        time.sleep(5)
         os.remove('flightpath.txt')
 
     def _sendingCommand(self):
@@ -131,7 +142,8 @@ class TelloUI:
 
             if data['status'] == True:
                 if data['flight_plan'] == "LINE":
-                    self.enqueue(['takeoff','up 50','forward 100','land'])
+                    # self.enqueue(['takeoff','up 50','flip f','land'],['takeoff','up 50','forward 100','land'])
+                    self.enqueue(['takeoff','up 100','forward 100','land'],['takeoff','up 50','forward 100','land'])
             # time.sleep(1)
 
     def sendTelloStatus(self):
@@ -164,6 +176,19 @@ class TelloUI:
         """
         self.quit_waiting_flag = True
 
+    def upload_blob(self, source_file_name):
+        """Uploads a file to the bucket."""
+        print('Uploading file to GC.'.format(source_file_name))
+        bucket_name = 'pennappsxx-drone-unprocessed'
+        storage_client = storage.Client.from_service_account_json(
+        'key.json')
+        bucket = storage_client.get_bucket(bucket_name)
+        blob = bucket.blob('unprocessed/' + source_file_name)
+
+        blob.upload_from_filename(source_file_name)
+
+        print('File {} uploaded to GC.'.format(source_file_name))
+
     def takeSnapshot(self):
         """
         save the current frame of the video as a jpg file and put it into outputpath
@@ -178,7 +203,7 @@ class TelloUI:
         # save the file
         cv2.imwrite(p, cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR))
         print("[INFO] saved {}".format(filename))
-
+        self.upload_blob(filename)
 
     def pauseVideo(self):
         """
@@ -191,48 +216,6 @@ class TelloUI:
             self.btn_pause.config(relief="sunken")
             self.tello.video_freeze(True)
 
-    def telloTakeOff(self):
-        return self.tello.takeoff()
-
-    def telloLanding(self):
-        return self.tello.land()
-
-    def telloFlip_l(self):
-        return self.tello.flip('l')
-
-    def telloFlip_r(self):
-        return self.tello.flip('r')
-
-    def telloFlip_f(self):
-        return self.tello.flip('f')
-
-    def telloFlip_b(self):
-        return self.tello.flip('b')
-
-    def telloCW(self, degree):
-        return self.tello.rotate_cw(degree)
-
-    def telloCCW(self, degree):
-        return self.tello.rotate_ccw(degree)
-
-    def telloMoveForward(self, distance):
-        return self.tello.move_forward(distance)
-
-    def telloMoveBackward(self, distance):
-        return self.tello.move_backward(distance)
-
-    def telloMoveLeft(self, distance):
-        return self.tello.move_left(distance)
-
-    def telloMoveRight(self, distance):
-        return self.tello.move_right(distance)
-
-    def telloUp(self, dist):
-        return self.tello.move_up(dist)
-
-    def telloDown(self, dist):
-        return self.tello.move_down(dist)
-
     def updateTrackBar(self):
         self.my_tello_hand.setThr(self.hand_thr_bar.get())
 
@@ -243,43 +226,6 @@ class TelloUI:
     def updateDegreebar(self):
         self.degree = self.degree_bar.get()
         print 'reset distance to %d' % self.degree
-
-    def on_keypress_w(self, event):
-        print "up %d m" % self.distance
-        self.telloUp(self.distance)
-
-    def on_keypress_s(self, event):
-        print "down %d m" % self.distance
-        self.telloDown(self.distance)
-
-    def on_keypress_a(self, event):
-        print "ccw %d degree" % self.degree
-        self.tello.rotate_ccw(self.degree)
-
-    def on_keypress_d(self, event):
-        print "cw %d m" % self.degree
-        self.tello.rotate_cw(self.degree)
-
-    def on_keypress_up(self, event):
-        print "forward %d m" % self.distance
-        self.telloMoveForward(self.distance)
-
-    def on_keypress_down(self, event):
-        print "backward %d m" % self.distance
-        self.telloMoveBackward(self.distance)
-
-    def on_keypress_left(self, event):
-        print "left %d m" % self.distance
-        self.telloMoveLeft(self.distance)
-
-    def on_keypress_right(self, event):
-        print "right %d m" % self.distance
-        self.telloMoveRight(self.distance)
-
-    def on_keypress_enter(self, event):
-        if self.frame is not None:
-            self.registerFace()
-        self.tmp_f.focus_set()
 
     def onClose(self):
         """
