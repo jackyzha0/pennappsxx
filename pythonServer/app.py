@@ -17,7 +17,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
 
 api = Api(app)
 db = SQLAlchemy(app)
-db.create_all()
 
 VALID_FLIGHT_PLANS = ['CONE', 'LINE']
 
@@ -35,12 +34,13 @@ class Jobs(db.Model):       # historical record of jobs
 
 class DroneStatus(db.Model):
     __tablename__ = 'drone_status'
-    drone_id =              db.Column(db.Integer, primary_key=True)
-#     job_id =                db.Column(db.String(20), nullable=False)
-    model =                 db.Column(db.String(50), nullable=False)
+    drone_id =              db.Column(db.String(30), primary_key=True)
+    model =                 db.Column(db.String(50), nullable=True)
     active =                db.Column(db.Boolean, default=False)
     battery =               db.Column(db.Float, default=0.0)
     last_updated_date =     db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+db.create_all()
 
 # Dashboard Stuff ---------------------
 class Status(Resource):
@@ -52,10 +52,10 @@ class Status(Resource):
         status = DroneStatus.query.all()
         for s in status:
             result.append({
-                drone_id: s.drone_id,
-                model: s.model,
-                active: s.active,
-                battery: s.battery,
+                "drone_id": s.drone_id,
+                "model": s.model,
+                "active": s.active,
+                "battery": s.battery,
             })
 
         return {
@@ -104,9 +104,9 @@ class RecentJobs(Resource):
         jobs = Jobs.query.limit(10).all()
         for j in jobs:
             result.append({
-                job_id: j.job_id,
-                flight_plan: j.flight_plan,
-                job_created_date: j.job_created_date
+                "job_id": j.job_id,
+                "flight_plan": j.flight_plan,
+                "job_created_date": j.job_created_date
             })
 
         return {
@@ -137,7 +137,6 @@ class Fetch(Resource):
         job = JobQueue.query.limit(1).all()
         job_id = job[0].job_id
         flight_plan = job[0].flight_plan
-        print("DEBUG2:", job[0])
         db.session.delete(job[0])
         db.session.commit()
 
@@ -168,11 +167,21 @@ class Info(Resource):
         active =        json_data['active']
         battery =       json_data['battery']
 
-        status = DroneStatus(drone_id, model, active, battery)
+        # if already exists
+        drone_exists = DroneStatus.query.filter_by(drone_id=drone_id).first()
+        if drone_exists:
+            drone_exists.model = model
+            drone_exists.active = active
+            drone_exists.battery = battery
+            db.session.commit()
+            return {
+                "result": "OK"
+            }, 200
+
+        status = DroneStatus(drone_id=drone_id, model=model, active=active, battery=battery)
         db.session.add(status)
         db.session.commit()
 
-        print('DEBUG:', drone_id, model, active, battery)
         return {
             "result": "OK"
         }, 200
