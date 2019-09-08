@@ -9,7 +9,6 @@ def run():
     ips = [x[0:20].replace(" ","") for x in ips]
     # ips = ["192.168.137.156"]
 
-
     swarm = TelloSwarm.fromIps(ips)
     swarm.connect()
 
