@@ -7,3 +7,4 @@ drone_control/restful/h264decoder/Windows
 *.pyc
 
 *.JPG
+key.json
