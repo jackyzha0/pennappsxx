@@ -118,21 +118,21 @@ export default class PlanScreen extends Component {
 
                   <div style={styles.panel}>
                     <div style={{textAlign: 'center'}}>
-                    <img class="ui small image" src={wtello} /> White Tello Drone
+                    <img className="ui small image" src={wtello} /> White Tello Drone
                     </div>
 
                     <div style={{width: "100%", display: "flex", justifyContent: "space-between", marginLeft: "250px", marginRight: "250px"}}>
                       <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
-                        <p><p style={{fontWeight: "bold"}}>Drone ID:</p> 239847987</p>
-                        <p><p style={{fontWeight: "bold"}}>Job ID:</p> 19384791</p>
-                        <p><p style={{fontWeight: "bold"}}>Model:</p> EDU</p>
-                        <p><p style={{fontWeight: "bold"}}>Battery:</p> 100%</p>
+                        <p><span style={{fontWeight: "bold"}}>Drone ID:</span> 239847987</p>
+                        <p><span style={{fontWeight: "bold"}}>Job ID:</span> 19384791</p>
+                        <p><span style={{fontWeight: "bold"}}>Model:</span> EDU</p>
+                        <p><span style={{fontWeight: "bold"}}>Battery:</span> 100%</p>
                       </div>
                       <div style={{display: 'flex', flexFlow: 'column'}}>
                          <p style={ isActive ? {color:'green'} : {color: 'red'}}> STATUS</p>
-                         <p><p style={{fontWeight: "bold"}}>Flight Time:</p> 3 minutes</p>
-                         <p><p style={{fontWeight: "bold"}}>Speed:</p> 5 km/hour</p>
-                         <p><p style={{fontWeight: "bold"}}>Last Updated Date:</p> 9/7/2019</p>
+                         <p><span style={{fontWeight: "bold"}}>Flight Time:</span> 3 minutes</p>
+                         <p><span style={{fontWeight: "bold"}}>Speed:</span> 5 km/hour</p>
+                         <p><span style={{fontWeight: "bold"}}>Last Updated Date:</span> 9/7/2019</p>
                       </div>
                     </div>
 
@@ -151,16 +151,16 @@ export default class PlanScreen extends Component {
 
                   <div style={{width: "100%", display: "flex", justifyContent: "space-between", marginLeft: "250px", marginRight: "250px"}}>
                     <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
-                      <p><p style={{fontWeight: "bold"}}>Drone ID:</p> 239847987</p>
-                      <p><p style={{fontWeight: "bold"}}>Job ID:</p> 19384791</p>
-                      <p><p style={{fontWeight: "bold"}}>Model:</p> EDU</p>
-                      <p><p style={{fontWeight: "bold"}}>Battery:</p> 100%</p>
+                      <p><span style={{fontWeight: "bold"}}>Drone ID:</span> 239847987</p>
+                      <p><span style={{fontWeight: "bold"}}>Job ID:</span> 19384791</p>
+                      <p><span style={{fontWeight: "bold"}}>Model:</span> EDU</p>
+                      <p><span style={{fontWeight: "bold"}}>Battery:</span> 100%</p>
                     </div>
                     <div style={{display: 'flex', flexFlow: 'column'}}>
                        <p style={ isActive ? {color:'green'} : {color: 'red'}}> STATUS</p>
-                       <p><p style={{fontWeight: "bold"}}>Flight Time:</p> 3 minutes</p>
-                       <p><p style={{fontWeight: "bold"}}>Speed:</p> 5 km/hour</p>
-                       <p><p style={{fontWeight: "bold"}}>Last Updated Date:</p> 9/7/2019</p>
+                       <p><span style={{fontWeight: "bold"}}>Flight Time:</span> 3 minutes</p>
+                       <p><span style={{fontWeight: "bold"}}>Speed:</span> 5 km/hour</p>
+                       <p><span style={{fontWeight: "bold"}}>Last Updated Date:</span> 9/7/2019</p>
                     </div>
                   </div>
 
@@ -177,28 +177,27 @@ export default class PlanScreen extends Component {
                   </div>
                   <div style={{width: "100%", display: "flex", justifyContent: "space-between", marginLeft: "250px", marginRight: "250px"}}>
                     <div style={{display: 'flex', flexFlow: 'column', textAlign: 'left'}}>
-                      <p><p style={{fontWeight: "bold"}}>Drone ID:</p> 239847987</p>
-                      <p><p style={{fontWeight: "bold"}}>Job ID:</p> 19384791</p>
-                      <p><p style={{fontWeight: "bold"}}>Model:</p> EDU</p>
-                      <p><p style={{fontWeight: "bold"}}>Battery:</p> 100%</p>
+                      <p><span style={{fontWeight: "bold"}}>Drone ID:</span> 239847987</p>
+                      <p><span style={{fontWeight: "bold"}}>Job ID:</span> 19384791</p>
+                      <p><span style={{fontWeight: "bold"}}>Model:</span> EDU</p>
+                      <p><span style={{fontWeight: "bold"}}>Battery:</span> 100%</p>
                     </div>
                     <div style={{display: 'flex', flexFlow: 'column'}}>
                        <p style={ isActive ? {color:'green'} : {color: 'red'}}> STATUS</p>
-                       <p><p style={{fontWeight: "bold"}}>Flight Time:</p> 3 minutes</p>
-                       <p><p style={{fontWeight: "bold"}}>Speed:</p> 5 km/hour</p>
-                       <p><p style={{fontWeight: "bold"}}>Last Updated Date:</p> 9/7/2019</p>
+                       <p><span style={{fontWeight: "bold"}}>Flight Time:</span> 3 minutes</p>
+                       <p><span style={{fontWeight: "bold"}}>Speed:</span> 5 km/hour</p>
+                       <p><span style={{fontWeight: "bold"}}>Last Updated Date:</span> 9/7/2019</p>
                     </div>
                   </div>
                 </div>
                 </List.Content>
-                <button onClick={() => this.launchDrones(this.state.flightPlan)}>click me</button>
               </List.Item>
             </List>
           </Segment>
         </div>
         <div style={{display: "flex", justifyContent: "flex-end", marginTop: "10px", marginRight: "10px", marginBottom: "10px"}}>
         <p style={{marginTop:"12px", marginRight: "25px", color: "white"}}> Selected Flight Pattern: <em style={{color: "ADD8E6", fontWeight: "bold"}}> LINEAR </em> </p>
-        <button class="medium ui green button">
+        <button className="medium ui green button" onClick={() => this.launchDrones(this.state.flightPlan)}>
           DEPLOY
         </button>
         </div>

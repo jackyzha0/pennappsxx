@@ -5,6 +5,6 @@ __pycache__/
 *$py.class
 drone_control/restful/h264decoder/Windows
 *.pyc
-
+*.db
 *.JPG
 key.json

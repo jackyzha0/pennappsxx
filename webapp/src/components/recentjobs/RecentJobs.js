@@ -39,7 +39,7 @@ const JobsRow = ({jobCreatedDate, jobId, flightPlan}) => (
   </div>
 );
 
-const RecentJobs = ({recentJobs}) => (
+const RecentJobs = ({recentJobs = []}) => (
   <div style={styles.jobs}>
     <div style={{width: '100%', padding: '1rem', borderBottom: '1px solid #1b1c1d'}}>
       <p>Recent Jobs</p>

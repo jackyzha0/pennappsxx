@@ -106,7 +106,7 @@ class RecentJobs(Resource):
             result.append({
                 "job_id": j.job_id,
                 "flight_plan": j.flight_plan,
-                "job_created_date": j.job_created_date
+                "job_created_date": str(j.job_created_date)
             })
 
         return {
