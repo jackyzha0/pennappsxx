@@ -47,22 +47,15 @@ def run():
     os.remove('flightpath.txt')
 
 def sendTelloStatus(self):
-    #get the job_id
-    URL = "https://pennappsxx.herokuapp.com/fetch"
-    r = requests.get(url = URL, params = {})
-    data = r.json()
-    id = str(data['job_id'])
-
     #send both tello status to server one after another
     t = self.tellos[0]
-    URL = "https://penappsxx.herokuapp.com/info/" + id
+    URL = "https://penappsxx.herokuapp.com/info/"
     data = {
         'drone_id': t.address[0],
         'active': True,
         'battery': t.get_battery(),
         'flight_time': t.get_flight_time(),
         'speed': t.get_speed(),
-        'job_id': id,
         'model': 'tello-edu'
     }
     requests.post(url = URL, data = data)
@@ -74,7 +67,6 @@ def sendTelloStatus(self):
         'battery': t.get_battery(),
         'flight_time': t.get_flight_time(),
         'speed': t.get_speed(),
-        'job_id': id,
         'model': 'tello-edu'
     }
     requests.post(url = URL, data = data)

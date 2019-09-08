@@ -149,23 +149,15 @@ class TelloUI:
     def sendTelloStatus(self):
         while os.path.isfile('flightpath.txt'):
             time.sleep(5)
-
-            #get the job_id
-            URL = "https://pennappsxx.herokuapp.com/fetch"
-            r = requests.get(url = URL, params = {})
-            data = r.json()
-            id = str(data['job_id'])
-
             #send tello status to server
             t = self.tello
-            URL = "https://penappsxx.herokuapp.com/info/" + id
+            URL = "https://penappsxx.herokuapp.com/info/"
             data = {
                 'drone_id': t.address[0],
                 'active': True,
                 'battery': t.get_battery(),
                 'flight_time': t.get_flight_time(),
                 'speed': t.get_speed(),
-                'job_id': id,
                 'model': 'tello'
             }
             r = requests.post(url = URL, data = data)
