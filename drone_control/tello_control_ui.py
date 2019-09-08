@@ -170,16 +170,16 @@ class TelloUI:
 
     def upload_blob(self, source_file_name):
         """Uploads a file to the bucket."""
-        print('Uploading file to GC.'.format(source_file_name))
+        print('Uploading file to GC.')
         bucket_name = 'pennappsxx-drone-unprocessed'
         storage_client = storage.Client.from_service_account_json(
         'key.json')
         bucket = storage_client.get_bucket(bucket_name)
         blob = bucket.blob('unprocessed/' + source_file_name)
 
-        blob.upload_from_filename(source_file_name)
+        blob.upload_from_filename('img/' + source_file_name)
 
-        print('File {} uploaded to GC.'.format(source_file_name))
+        print('File {} uploaded to GC.'.format('img/' + source_file_name))
 
     def takeSnapshot(self):
         """

@@ -1,4 +1,0 @@
-takeoff
-up 100
-forward 100
-land
