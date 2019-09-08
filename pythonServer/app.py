@@ -83,6 +83,8 @@ class Command(Resource):
             }, 400
 
         job_id = str(uuid.uuid4()) # randomly generate uuid
+
+        # add to job history
         job = Jobs(job_id=job_id, flight_plan=flight_plan)
         db.session.add(job)
         db.session.commit()
@@ -96,6 +98,26 @@ class Command(Resource):
             "result": "OK",
             "job_id": job_id
         }, 200
+
+class RecentJobs(Resource):
+    '''
+        Dashboard queries for the recent 10 jobs
+    '''
+    def get(self):
+        result = []
+        jobs = Jobs.query.limit(10).all()
+        for j in jobs:
+            result.append({
+                job_id: j.job_id,
+                flight_plan: j.flight_plan,
+                job_created_date: j.job_created_date
+            })
+
+        return {
+            "result": "OK",
+            "recentJobs": result
+        }, 200
+
 
 # Drone Stuff ----------------------------
 class Fetch(Resource):
@@ -164,8 +186,9 @@ class Info(Resource):
 
 api.add_resource(Status, '/status')
 api.add_resource(Command, '/command')
+api.add_resource(RecentJobs, '/jobs')
 api.add_resource(Fetch, '/fetch')
-api.add_resource(Info, '/info/1')
+api.add_resource(Info, '/info')
 
 if __name__ == "__main__":
   app.run()
