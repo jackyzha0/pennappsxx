@@ -11,6 +11,16 @@ html, body {
   padding:0;
 }
 
+.modals {
+  z-index: 9999999;
+}
+
+.modals > .modal {
+  left: auto;
+  top: auto;
+  height: 500px;
+}
+
 body {
   height: 100%;
   width: 100%;

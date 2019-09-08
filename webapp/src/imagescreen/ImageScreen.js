@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Gallery from "react-photo-gallery";
 import './index.css'
+import { Button, Header, Image, Modal } from 'semantic-ui-react'
+
 
 const styles = {
   statusBar: {
@@ -16,9 +18,14 @@ export default class ImageScreen extends Component {
     super(props);
 
     this.state = {
-      images: []
+      images: [],
+      isOpen: false,
+      modalImg: ''
     };
     this.fetchImages = this.fetchImages.bind(this);
+    this.handleImgClick = this.handleImgClick.bind(this);
+    this.handleModalOpen = this.handleModalOpen.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
   }
 
   componentWillUnmount() {
@@ -30,6 +37,19 @@ export default class ImageScreen extends Component {
     this.interval = setInterval(() => {
       this.fetchImages();
     }, 5000);
+  }
+
+  handleImgClick(e, obj) {
+    // console.log(obj.photo.src);
+    this.setState({ isOpen: true, modalImg: obj.photo.src });
+  }
+
+  handleModalOpen(e) {
+    this.setState({ isOpen: true, modalImg: '' });
+  }
+
+  handleModalClose(e) {
+    this.setState({ isOpen: false, modalImg: ''});
   }
 
   async fetchImages() {
@@ -69,12 +89,36 @@ export default class ImageScreen extends Component {
       }
     });
     console.log("JSON IS ", json_file);
-    // console.log(JSON.parse(json_file));
 
     return (
       <div className="page-container">
         <div className="gallery">
-          <Gallery photos={new_urls} targetRowHeight={150}/>
+          <Gallery photos={new_urls} targetRowHeight={150} onClick={this.handleImgClick}/>
+
+          <Modal dimmer={true} open={this.state.isOpen} onClose={this.handleModalClose}>
+            <Modal.Header>Snapshot</Modal.Header>
+            <Modal.Content image>
+              <Image
+                wrapped
+                size='large'
+                src={this.state.modalImg}
+              />
+              <Modal.Description>
+              </Modal.Description>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color='black' onClick={this.handleModalClose}>
+                Close
+              </Button>
+              <Button
+                positive
+                icon='checkmark'
+                labelPosition='right'
+                content="Save"
+                onClick={this.handleModalClose}
+              />
+            </Modal.Actions>
+          </Modal>
         </div>
       </div>
     )

@@ -53,6 +53,7 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     color: '#9c9c9c',
     width: drawerWidth,
+    zIndex: 0,
   }
 }));
 
@@ -122,8 +123,8 @@ class NavBar extends Component {
           <List>
             <Link style={styles.navItem} to="/">
               <ListItem button key="Home">
-                <ListItemIcon><HomeIcon /></ListItemIcon>
-                <ListItemText secondary="Home" />
+                {/*<ListItemIcon><HomeIcon /></ListItemIcon>*/}
+                <ListItemText primary="Home"/>
               </ListItem>
             </Link>
 
@@ -131,7 +132,7 @@ class NavBar extends Component {
 
             <Link style={styles.navItem} to="/images">
               <ListItem button key="Images">
-                <ListItemIcon><SearchIcon /></ListItemIcon>
+                {/*<ListItemIcon><SearchIcon /></ListItemIcon>*/}
                 <ListItemText primary="Images" />
               </ListItem>
             </Link>
@@ -140,7 +141,7 @@ class NavBar extends Component {
 
             <Link style={styles.navItem} to="/data">
               <ListItem button key="Report">
-                <ListItemIcon><MapIcon /></ListItemIcon>
+                {/*<ListItemIcon><MapIcon /></ListItemIcon>*/}
                 <ListItemText primary="Report" />
               </ListItem>
             </Link>
