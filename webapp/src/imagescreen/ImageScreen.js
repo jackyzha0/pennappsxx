@@ -28,38 +28,34 @@ export default class ImageScreen extends Component {
   }
 
   fetchImages() {
-    // axios.get(`some_url_where_the_endpoint_is`)
-    //   .then(res => {
-    //     this.setState({ images: res.data });
-    //   })
+    var pics = [];
+    axios.get('https://www.googleapis.com/storage/v1/b/pennappsxx-drone-unprocessed/o?prefix=processed')
+      .then(res => {
+        for (var i in res.data.items) {
+          const name = res.data.items[i].name.replace(/\//g, "%2F");
+          const url = 'https://www.googleapis.com/storage/v1/b/pennappsxx-drone-unprocessed/o/' + name + '?alt=media';
+          axios.get(url)
+            .then(res => {
+              pics.push(res);
+            });
+        }
+      });
+    console.log(pics);
+    this.setState({ images: pics });
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  mockList = () => {
-    var images = [];
-    // for(var i=0;i<20;i++) {
-    //   const image = {
-    //     src: require('./test2.JPG'),
-    //     width: 1,
-    //     height: 1
-    //   };
-    //   images.push(image);
-    // }
-    return images;
-  }
-
   render() {
-    const images = this.mockList();
     return (
       <div className="page-container">
         <div style={styles.statusBar}>
           <p>progress details about the mission go here</p>
         </div>
         <div className="gallery">
-          <Gallery photos={images} targetRowHeight={300}/>
+          <Gallery photos={this.state.images} targetRowHeight={300}/>
         </div>
       </div>
     )
