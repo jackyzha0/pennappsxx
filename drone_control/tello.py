@@ -8,7 +8,7 @@ class Tello:
     """Wrapper class to interact with the Tello drone."""
 
     def __init__(self, local_ip, local_port, imperial=False, command_timeout=.3, tello_ip='192.168.10.1',
-                 tello_port=8889, follower=False, name='no-name'):
+                 tello_port=8889, follower=False, name='default-name'):
         """
         Binds to the local IP/port and puts the Tello into command mode.
 
@@ -20,7 +20,7 @@ class Tello:
         :param tello_ip (str): Tello IP.
         :param tello_port (int): Tello port.
         """
-        self.name = name
+        self.name = tello_ip
         self.abort_flag = False
         self.decoder = libh264decoder.H264Decoder()
         self.command_timeout = command_timeout
@@ -272,7 +272,7 @@ class Tello:
         try:
             battery = int(battery)
         except:
-            pass
+            return -1
 
         return battery
 
@@ -289,7 +289,7 @@ class Tello:
         try:
             flight_time = int(flight_time)
         except:
-            pass
+            return -1
 
         return flight_time
 
@@ -311,7 +311,7 @@ class Tello:
             else:
                 speed = round((speed / 27.7778), 1)
         except:
-            pass
+            return -1
 
         return speed
 

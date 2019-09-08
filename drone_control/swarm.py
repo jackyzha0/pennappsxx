@@ -56,22 +56,18 @@ def sendTelloStatus(swarm):
         t = swarm.tellos[0]
         URL = "https://penappsxx.herokuapp.com/info/"
         data = {
-            'drone_id': t.address[0],
+            'drone_id': t.name,
             'active': True,
-            'battery': t.get_battery(),
-            'flight_time': t.get_flight_time(),
-            'speed': t.get_speed(),
+            'battery': t.get_bat(),
             'model': 'tello-edu'
         }
         requests.post(url = URL, data = data)
 
         t = swarm.tellos[1]
         data = {
-            'drone_id': t.address[0],
+            'drone_id': t.name,
             'active': True,
-            'battery': t.get_battery(),
-            'flight_time': t.get_flight_time(),
-            'speed': t.get_speed(),
+            'battery': t.get_bat(),
             'model': 'tello-edu'
         }
         requests.post(url = URL, data = data)

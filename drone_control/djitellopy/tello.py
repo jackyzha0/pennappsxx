@@ -53,12 +53,14 @@ class Tello:
 
 
     def __init__(self,
+        name='default-name',
         host='192.168.10.1',
         port=8889,
         client_socket=None,
         enable_exceptions=True,
         retry_count=3):
 
+        self.name = host
         self.address = (host, port)
         self.response = None
         self.response_state = None  #to attain the response of the states

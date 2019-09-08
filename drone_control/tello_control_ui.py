@@ -140,8 +140,7 @@ class TelloUI:
             if data['status'] == True:
                 if data['flight_plan'] == "LINE":
                     # self.enqueue(['takeoff','up 50','flip f','land'],['takeoff','up 50','forward 100','land'])
-                    self.enqueue(['takeoff','up 100','forward 100','land'],['takeoff','up 50','forward 100','land'])
-            # time.sleep(1)
+                    self.enqueue(['takeoff','up 75','forward 75','land'],['takeoff','up 100','forward 75','forward 75','land'])
 
     def sendTelloStatus(self):
         while True:
@@ -151,11 +150,9 @@ class TelloUI:
                 t = self.tello
                 URL = "https://penappsxx.herokuapp.com/info/"
                 data = {
-                    'drone_id': t.address[0],
+                    'drone_id': t.name,
                     'active': True,
                     'battery': t.get_battery(),
-                    'flight_time': t.get_flight_time(),
-                    'speed': t.get_speed(),
                     'model': 'tello'
                 }
                 r = requests.post(url = URL, data = data)
