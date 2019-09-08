@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import wtello from './tello.png';
 import btello from './blacktello.png';
+import linear from './line-chart.png';
 import Carousel from 'react-bootstrap/Carousel';
-import { List, Segment } from 'semantic-ui-react'
+import { List, Segment, Button, Label } from 'semantic-ui-react'
 
 const styles = {
   topPanel: {
-    height: '20rem',
+    height: '30rem',
     width: '100%',
   },
   botPanel: {
@@ -83,16 +84,16 @@ export default class PlanScreen extends Component {
     return (
       <div className="page-container">
         <div style={styles.topPanel}>
-          <Carousel style={{height: "100%"}}>
-            <Carousel.Item style={{height:"100%", backgroundColor:"black"}}>
+          <Carousel interval="10000" style={{height: "100%"}}>
+            <Carousel.Item style={{height:"100%", backgroundColor:"#ADD8E6"}}>
               <div style={{height:"100%"}}>
               <img src={btello} className="Arrow-sideleft" alt="arrow" />
               <img src={wtello} className="Arrow" alt="arrow" />
               <img src={btello} className="Arrow-sideright" alt="arrow" />
               </div>
               <Carousel.Caption>
-                <h3>Layout 1</h3>
-                <p>This is layout 1.</p>
+                <h3>FAN OUT</h3>
+                <p>Our drones will move together in a cone formation outwards.</p>
               </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item style={{height:"100%"}}>
@@ -102,8 +103,8 @@ export default class PlanScreen extends Component {
               <img src={btello} className="Arrow" alt="arrow" />
               </div>
               <Carousel.Caption>
-                <h3>Layout 2</h3>
-                <p>This is layout 2.</p>
+                <h3>LINEAR</h3>
+                <p>Our drones will move together in a linear direction forwards.</p>
               </Carousel.Caption>
             </Carousel.Item>
           </Carousel>
@@ -194,6 +195,12 @@ export default class PlanScreen extends Component {
               </List.Item>
             </List>
           </Segment>
+        </div>
+        <div style={{display: "flex", justifyContent: "flex-end", marginTop: "10px", marginRight: "10px", marginBottom: "10px"}}>
+        <p style={{marginTop:"12px", marginRight: "25px", color: "white"}}> Selected Flight Pattern: <em style={{color: "ADD8E6", fontWeight: "bold"}}> LINEAR </em> </p>
+        <button class="medium ui green button">
+          DEPLOY
+        </button>
         </div>
       </div>
     )
