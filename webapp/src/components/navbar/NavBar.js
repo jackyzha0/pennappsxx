@@ -38,6 +38,7 @@ const NavBar = () => {
         paper: classes.drawerPaper,
       }}
       anchor="left"
+
     >
       <div className={classes.toolbar} />
       <Divider />
@@ -67,7 +68,7 @@ const NavBar = () => {
           </ListItem>
         </Link>
 
-        <Divider />
+        <Divider style={{backgroundColor:"white"}} />
       </List>
     </Drawer>
   )
