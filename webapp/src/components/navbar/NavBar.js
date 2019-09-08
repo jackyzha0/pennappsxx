@@ -126,9 +126,9 @@ class NavBar extends Component {
             <Divider />
 
             <Link style={styles.navItem} to="/data">
-              <ListItem button key="Map">
+              <ListItem button key="Report">
                 <ListItemIcon><MapIcon /></ListItemIcon>
-                <ListItemText primary="Map" />
+                <ListItemText primary="Report" />
               </ListItem>
             </Link>
 
