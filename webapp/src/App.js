@@ -14,7 +14,7 @@ const styles = {
     height: '100%',
     marginRight: '4rem',
     borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-    overflowY: 'scroll'
+    overflowY: 'scroll',
   }
 };
 

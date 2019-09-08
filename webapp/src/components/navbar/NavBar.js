@@ -18,14 +18,17 @@ const styles = {
   logo: {
     height: '5rem',
     width: '100%',
-    borderBottom: '1px solid #1b1c1d'
+    borderBottom: '1px solid #9c9c9c',
+    color: '#9c9c9c'
   },
   innerContainer: {
+    backgroundColor: '#1b1c1d',
     display: 'flex',
     height: '100%',
     width: '100%',
     flexFlow: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    color: '#9c9c9c'
   }
 };
 
@@ -33,12 +36,18 @@ const drawerWidth = 280;
 
 const useStyles = makeStyles(theme => ({
   drawer: {
+    backgroundColor: '#1b1c1d',
+    color: '#9c9c9c',
     display: 'flex',
     height: '100%',
-    width: drawerWidth
+    width: drawerWidth,
+    borderRight: '1px solid #9c9c9c'
   },
   drawerPaper: {
+    backgroundColor: '#1b1c1d',
+    borderRight: '1px solid #9c9c9c',
     height: '100%',
+    color: '#9c9c9c',
     width: drawerWidth,
   }
 }));
@@ -110,7 +119,7 @@ class NavBar extends Component {
             <Link style={styles.navItem} to="/">
               <ListItem button key="Home">
                 <ListItemIcon><HomeIcon /></ListItemIcon>
-                <ListItemText primary="Home" />
+                <ListItemText secondary="Home" />
               </ListItem>
             </Link>
 
@@ -126,9 +135,9 @@ class NavBar extends Component {
             <Divider />
 
             <Link style={styles.navItem} to="/data">
-              <ListItem button key="Map">
+              <ListItem button key="Report">
                 <ListItemIcon><MapIcon /></ListItemIcon>
-                <ListItemText primary="Map" />
+                <ListItemText primary="Report" />
               </ListItem>
             </Link>
 

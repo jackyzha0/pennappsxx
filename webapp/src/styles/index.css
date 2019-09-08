@@ -32,12 +32,13 @@ body {
   text-align: center;
   height: 100%;
   width: 100%;
+  background-color: #1b1c1d;
 }
 
 .page-container {
   display: flex;
   flex-flow: column;
-  height: min-content;
+  /*height: min-content;*/
   width: 100%;
 }
 
