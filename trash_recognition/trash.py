@@ -236,7 +236,7 @@ if __name__== "__main__":
 		for name in fnames:
 			print("found images!")
 			#don't try to process .json file
-			if name == 'found.json':
+			if ".jpg" not in name:
 				continue
 			# find trash in image
 			v_boxes, v_labels, v_scores = model.predict("/Users/hayden/TrashModel/raw/" + name)

@@ -11,13 +11,17 @@ import MapIcon from '@material-ui/icons/Map';
 import ListItemText from '@material-ui/core/ListItemText';
 import {makeStyles} from '@material-ui/core/styles';
 import RecentJobs from '../recentjobs/RecentJobs';
+import Logo from './logo.png';
 
 let abortController = new AbortController();
 
 const styles = {
   logo: {
+    display: 'flex',
     height: '5rem',
     width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderBottom: '1px solid #9c9c9c',
     color: '#9c9c9c'
   },
@@ -49,6 +53,7 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     color: '#9c9c9c',
     width: drawerWidth,
+    zIndex: 0,
   }
 }));
 
@@ -111,15 +116,15 @@ class NavBar extends Component {
     return (
       <DrawerWrapper>
         <div style={styles.logo}>
-          <h1>Project SID</h1>
+          <img src={Logo} width={75}/>
         </div>
 
         <div style={styles.innerContainer}>
           <List>
             <Link style={styles.navItem} to="/">
               <ListItem button key="Home">
-                <ListItemIcon><HomeIcon /></ListItemIcon>
-                <ListItemText secondary="Home" />
+                {/*<ListItemIcon><HomeIcon /></ListItemIcon>*/}
+                <ListItemText primary="Home"/>
               </ListItem>
             </Link>
 
@@ -127,7 +132,7 @@ class NavBar extends Component {
 
             <Link style={styles.navItem} to="/images">
               <ListItem button key="Images">
-                <ListItemIcon><SearchIcon /></ListItemIcon>
+                {/*<ListItemIcon><SearchIcon /></ListItemIcon>*/}
                 <ListItemText primary="Images" />
               </ListItem>
             </Link>
@@ -136,7 +141,7 @@ class NavBar extends Component {
 
             <Link style={styles.navItem} to="/data">
               <ListItem button key="Report">
-                <ListItemIcon><MapIcon /></ListItemIcon>
+                {/*<ListItemIcon><MapIcon /></ListItemIcon>*/}
                 <ListItemText primary="Report" />
               </ListItem>
             </Link>

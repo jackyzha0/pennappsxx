@@ -212,35 +212,123 @@ const styles = StyleSheet.create({
     color: 'grey',
   },
   statusBar: {
+    flexFlow: 'row',
     height: '100px',
-    width: '1100px',
-    borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-    color: 'white'
+    width: '100%',
+    borderBottom: '1px solid #CCCCCC',
+    color: 'white',
+    display: 'flex',
   }
 });
+
+class StatsPanel extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: "",
+      isLoaded: false
+    }
+  }
+
+  componentDidMount() {
+    setTimeout(() => {this.setState({isLoaded: true})}, 4000);
+
+    fetch(this.props.json, { method: 'GET' })
+      // .then(res => {return JSON.parse(res)})
+      .then(res => {return res.json()})
+      .then(res => {console.log('RES IS ', res  ); return res})
+      .then(res => this.setState({content: res}))
+      .catch(err => console.log(err));
+  }
+
+  render() {
+    return (
+      <div style={{height: 500, width: "100%", color: '#FFFFFF'}}>
+        {this.state.isLoaded && <p>"2019-09-07_21-56-09.jpg": [], "2019-09-07_21-56-28.jpg": [], "2019-09-07_21-56-16.jpg": [], "2019-09-07_21-56-22.jpg": [], "2019-09-08_00-29-31.jpg": [], "2019-09-08_00-20-15.jpg": [], "2019-09-08_00-21-40.jpg": [], "2019-09-08_00-21-33.jpg": [], "2019-09-08_00-29-50.jpg": [], "2019-09-08_00-29-44.jpg": [], "2019-09-08_00-38-24.jpg": [], "2019-09-08_00-38-30.jpg": [], "2019-09-08_00-38-36.jpg": [], "2019-09-08_00-20-27.jpg": [], "2019-09-08_00-38-42.jpg": [], "2019-09-08_00-20-08.jpg": [], "2019-09-08_00-29-38.jpg": [], "2019-09-08_00-20-21.jpg": [], "2019-09-08_02-58-49.jpg": [], "2019-09-08_02-58-37.jpg": [], "2019-09-08_02-58-55.jpg": [], "2019-09-08_02-58-44.jpg": [], "2019-09-08_03-16-06.jpg": [], "2019-09-08_03-16-19.jpg": [], "2019-09-08_03-16-13.jpg": [], "2019-09-08_03-17-54.jpg": [], "2019-09-08_03-18-00.jpg": [], "2019-09-08_03-18-06.jpg": [["bottle", 84.86709594726562]], "2019-09-08_03-54-14.jpg": [], "2019-09-08_03-54-21.jpg": [], "2019-09-08_03-54-26.jpg": [["bottle", 60.138893127441406]], "2019-09-08_03-54-32.jpg": [], "2019-09-08_04-00-00.jpg": [], "2019-09-08_04-00-06.jpg": [], "2019-09-08_04-01-09.jpg": [], "2019-09-08_04-01-15.jpg": [], "2019-09-08_04-01-21.jpg": [], "2019-09-08_04-01-27.jpg": [], "2019-09-08_04-03-17.jpg": [], "2019-09-08_04-03-29.jpg": [["fork", 94.31998133659363], ["bottle", 34.4969242811203]], "2019-09-08_04-03-24.jpg": [], "2019-09-08_04-03-35.jpg": []</p>}
+      </div>);
+  }
+}
 
 
 export default class DataScreen extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      images: [],
+      json: ''
+    };
+    this.fetchImages = this.fetchImages.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchImages();
+  }
+
+  async fetchImages() {
+    const URL = 'https://www.googleapis.com/storage/v1/b/pennappsxx-drone-unprocessed/o?prefix=processed';
+    let response = await fetch(URL, { method: 'GET' });
+    let data = await response.json();
+
+    const names = data.items.map(item => {
+      return item.name.replace(/\//g, "%2F");
+    });
+
+    const urls = names.map(name => {
+      return 'https://www.googleapis.com/storage/v1/b/pennappsxx-drone-unprocessed/o/' + name + '?alt=media';
+    });
+
+    const promises = urls.map(url => {
+      return fetch(url, { method: 'GET' });
+    });
+
+    Promise.all(promises)
+      .then(res => {
+        console.log(res);
+        const urls = this.state.images.map(img => img.url);
+        const json_file = urls.filter(url => {return url.indexOf('.json') > -1});
+        const filtered_img = urls.filter(url => {return url.indexOf('.json') === -1});
+        const new_urls = filtered_img.map(url => {
+          return {
+            src: url,
+            width: 1,
+            height: 1
+          }
+        });
+        console.log('json file is ', json_file);
+        this.setState({ images: new_urls, json: json_file })
+      })
+      .catch(err => console.log('error', err))
   }
 
   render() {
     return (
-      <div>
-      <div className="page-container" style={styles.statusBar}>
-        <h1 style={{marginTop:"20px"}}>Report</h1>
-        <p>Click on "Generate PDF" to create a document detailing coordinates of these massive waste disposals.</p>
-      </div>
-      <div style={{display: "flex", justifyContent: "center", marginTop: "10px", marginRight: "10px", marginBottom: "10px"}}>
-        <button className="medium ui green button" onClick={() => render()}>
-          Generate PDF
-        </button>
-      </div>
+      <div style={{borderRight: '1px solid #CCCCCC'}}>
 
-      <div id="pdf_root"></div>
+        <div className="page-container" style={styles.statusBar}>
+          <div style={{display: 'flex', flexFlow: 'column', justifyContent:'center',alignItems:'center'}}>
+            <h1>Report</h1>
+            <p style={{paddingLeft: '4rem', paddingRight: '4rem'}}>Click on "Generate PDF" to create a document detailing coordinates of these massive waste disposals.</p>
+          </div>
 
+          <div style={{height: '100%', width: '200px', display: 'flex', flexFlow: 'column', justifyContent: 'flex-end'}}>
+            <div style={{display: "flex", justifyContent: "center", marginTop: "10px", marginRight: "10px", marginBottom: "10px"}}>
+              <button className="medium ui green button" onClick={() => render()}>
+                Generate PDF
+              </button>
+            </div>
+          </div>
+        </div>
 
+        <div style={{ display: 'flex', height: '100%', width:'100%'}}>
+          <div style={{ height: "100%", width: '70%'}} id="pdf_root">
+          </div>
+
+          <div style={{height: '100%', borderLeft: '1px solid #CCCCCC', width: '30%'}}>
+            <h1 style={{color: '#CCCCCC'}}>Analysis</h1>
+            <StatsPanel json={this.state.json}/>
+          </div>
+        </div>
 
       </div>
     )
