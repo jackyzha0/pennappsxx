@@ -129,18 +129,21 @@ class TelloUI:
                 time.sleep(3)
                 self.takeSnapshot()
             self.tello.send_command('land')
+        os.remove('flightpath.txt')
 
     def _sendingCommand(self):
-        if not os.path.isfile('flightpath.txt'):
-            URL = "https://pennappsxx.herokuapp.com/fetch"
-            r = requests.get(url = URL, params = {})
-            data = r.json()
-            print(data)
+        while True:
+            if not os.path.isfile('flightpath.txt'):
+                URL = "https://pennappsxx.herokuapp.com/fetch"
+                r = requests.get(url = URL, params = {})
+                data = r.json()
+                print(data)
 
-            if data['status'] == True:
-                if data['flight_plan'] == "LINE":
-                    # self.enqueue(['takeoff','up 50','flip f','land'],['takeoff','up 50','forward 100','land'])
-                    self.enqueue(['takeoff','up 75','forward 75','land'],['takeoff','up 25','forward 75','forward 75','land'])
+                if data['status'] == True:
+                    if data['flight_plan'] == "LINE":
+                        # self.enqueue(['takeoff','up 50','flip f','land'],['takeoff','up 50','forward 100','land'])
+                        self.enqueue(['takeoff','up 75','forward 75','land'],['takeoff','down 25','forward 60','forward 60','land'])
+            time.sleep(1)
 
     def sendTelloStatus(self):
         while True:
