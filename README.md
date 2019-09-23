@@ -1,5 +1,7 @@
 # Project Swarm Intelligent Drones (SID) - PennApps XX
 
+##### [Link to Devpost](https://devpost.com/software/pennappsxx)
+
 ## Inspiration
 We are fascinated by the pressing issues in environmental sustainability today. All growing up in green-driven cities in Canada, we feel almost useless in a completely different setting reading about tragic environmental events in current news. Learning about Amazon fires, consistent deforestation, pollution, and climate change, it pained us to see that many of our peers did not share that same sense of urgency. As a result, we were interested in making an initiative for ourselves, to ease the process of raising awareness for the environment in one way or another. The current lack of incentive of a call to action is a big driving force for us.
 
